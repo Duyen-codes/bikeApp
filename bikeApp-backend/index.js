@@ -9,6 +9,7 @@ const fastcsv = require("fast-csv");
 const https = require("https");
 const axios = require("axios");
 const needle = require("needle");
+const fetch = require("node-fetch");
 
 const Journey = require("./models/journey");
 const Station = require("./models/station");
@@ -24,7 +25,7 @@ mongoose.connect(MONGODB_URI).then(() => {
 });
 
 const journeyUrls = [
-	"https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv",
+	"https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv ",
 	"https://dev.hsl.fi/citybikes/od-trips-2021/2021-06.csv",
 	"https://dev.hsl.fi/citybikes/od-trips-2021/2021-07.csv",
 ];
@@ -32,71 +33,76 @@ const journeyUrls = [
 const stationUrl =
 	"https://opendata.arcgis.com/datasets/726277c507ef4914b0aec3cbcfcbfafc_0.csv";
 
-const csvfile =
-	__dirname +
-	"/dataset/stations/Helsingin_ja_Espoon_kaupunkipy%C3%B6r%C3%A4asemat_avoin.csv";
-const stream = fs.createReadStream(csvfile);
-
-// const readFile = (url) => {
-// 	https.get(url, (response) => {
-// 		response.setEncoding("utf-8");
-// 		let body = "";
-// 		response.on("data", (data) => {
-// 			body += data;
+// Read the station CSV file, insert data to stations collection in db
+// needle
+// 	.get(stationUrl)
+// 	.pipe(fastcsv.parse({ headers: true }))
+// 	.on("error", (error) => console.error(error))
+// 	.on("data", function (data) {
+// 		const doc = new Station(data);
+// 		doc.save((error) => {
+// 			if (error) {
+// 				console.error(error);
+// 			}
 // 		});
-// 		response.on("end", () => {
-// 			console.log(body);
-// 			// You can write the contents of the file to a local file using the fs module,
-// 			// or do something else with the data here.
-// 		});
+// 	})
+// 	.on("end", function () {
+// 		console.log(` stations have been successfully uploaded`);
 // 	});
-// };
 
-// const saveFile = (data) => {
-// 	const journey = new Journey({
-// 		data,
-// 	});
-// 	journey.save((error, file) => {
-// 		if (error) {
-// 			console.log(error);
-// 		} else {
-// 			console.log(`File saved: ${file}`);
-// 		}
-// 	});
-// };
-// journeyUrls.forEach((url) => {
-// 	readFile(url, (data) => {
-// 		saveFile(data);
-// 	});
-// });
+const fetchJourney = (url) => {
+	fetch(url)
+		.then((response) => {
+			return response.text();
+		})
+		.then((text) =>
+			csvtojson({
+				headers: [
+					"Departure",
+					"Return",
+					"Departure_station_id",
+					"Departure_station_name",
+					"Return_station_id",
+					"Return_station_name",
+					"Covered_distance",
+					"Duration",
+				],
+				delimiter: ",",
+			}).fromString(text),
+		)
+		.then((result) => {
+			const filteredResult = result.filter(
+				(item) => item.Covered_distance > 10 && item.Duration > 10,
+			);
 
-const readFile = (url) => {
-	needle.get(url);
+			Journey.insertMany(filteredResult)
+				.then(function () {
+					console.log("data inserted");
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		});
 };
 
-// Read the CSV file
-needle
-	.get(stationUrl)
-	.pipe(fastcsv.parse({ headers: true }))
-	.on("error", (error) => console.error(error))
-	.on("data", function (data) {
-		const doc = new Station(data);
-		doc.save((error) => {
-			if (error) {
-				console.error(error);
-			}
-		});
-	})
-	.on("end", function () {
-		console.log(` stations have been successfully uploaded`);
-	});
+journeyUrls.forEach((url) => {
+	fetchJourney(url);
+});
 
+// fetch stations from db
 app.get("/stations", (req, res) => {
 	Station.find((error, data) => {
 		if (error) {
 			console.error(error);
 		}
 		res.json(data);
+	});
+});
+
+// fetch journeys from db
+app.get("/journeys", (req, res) => {
+	Journey.find({}).then((data) => {
+		return res.json(data);
 	});
 });
 
