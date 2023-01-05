@@ -1,3 +1,4 @@
+require("dotenv").config();
 const http = require("http");
 const express = require("express");
 const app = express();
@@ -14,14 +15,11 @@ const fetch = require("node-fetch");
 const Journey = require("./models/journey");
 const Station = require("./models/station");
 
-const MONGODB_URI =
-	"mongodb+srv://bikeApp:bikeApp@cluster0.imz7ykd.mongodb.net/bikeApp?retryWrites=true&w=majority";
-
 mongoose.set("strictQuery", false);
 
 // Connect to the MongoDB cluster
-mongoose.connect(MONGODB_URI).then(() => {
-	console.log("connected to", MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI).then(() => {
+	console.log("connected to", process.env.MONGODB_URI);
 });
 
 const journeyUrls = [
@@ -71,7 +69,7 @@ const fetchJourney = (url) => {
 const insertJourneyToMongoDB = async () => {
 	await fetchJourney("https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv");
 	await fetchJourney("https://dev.hsl.fi/citybikes/od-trips-2021/2021-06.csv");
-	await fetchJourney("https://dev.hsl.fi/citybikes/od-trips-2021/2021-07.csv");
+
 	mongoose.connection.close();
 };
 
