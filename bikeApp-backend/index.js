@@ -11,6 +11,7 @@ const https = require("https");
 const axios = require("axios");
 const needle = require("needle");
 const fetch = require("node-fetch");
+const csv = require("csv-parser");
 
 const Journey = require("./models/journey");
 const Station = require("./models/station");
@@ -66,14 +67,62 @@ const fetchJourney = (url) => {
 		});
 };
 
-const insertJourneyToMongoDB = async () => {
-	await fetchJourney("https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv");
-	await fetchJourney("https://dev.hsl.fi/citybikes/od-trips-2021/2021-06.csv");
-
-	mongoose.connection.close();
+const insertStationToMongoDB = (stationUrl) => {
+	needle
+		.get(stationUrl)
+		.pipe(fastcsv.parse({ headers: true }))
+		.on("error", (error) => console.log("error:", error))
+		.on("data", function (data) {
+			console.log("got data");
+			const doc = new Station(data);
+			doc.save((error) => {
+				if (error) {
+					console.error(error);
+				}
+			});
+		})
+		.on("end", function () {
+			console.log(`stations have been successfully uploaded`);
+		});
 };
 
-insertJourneyToMongoDB();
+const insertDataToMongoDB = async () => {
+	console.log("inserting...");
+	await fetchJourney(journeyUrls[0]);
+	await fetchJourney(journeyUrls[1]);
+	await fetchJourney(journeyUrls[2]);
+	await insertStationToMongoDB(stationUrl);
+};
+
+// Check if database exists, if not insert data to MongoDB
+
+mongoose.connection.on("open", function (ref) {
+	mongoose.connection.db.listCollections().toArray(function (error, names) {
+		console.log("names", names);
+		const result = names.some(
+			(collection) =>
+				collection.name === "stations" || collection.name === "journeys",
+		);
+		console.log("result", result);
+		if (result) {
+			return;
+		} else {
+			console.log("inserting to db");
+			insertDataToMongoDB();
+		}
+	});
+});
+
+function checkDatabase(bikeApp) {
+	let alreadyExist;
+
+	new Admin(mongoose.connection.db).listDatabases((err, result) => {
+		let allDatabases = result.databases;
+		console.log("allDataBases", allDatabases);
+		alreadyExist = allDatabases.some((database) => database.name === "bikeApp");
+		return alreadyExist;
+	});
+}
 
 // fetch stations from db
 app.get("/stations", (req, res) => {
