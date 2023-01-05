@@ -25,30 +25,13 @@ mongoose.connect(MONGODB_URI).then(() => {
 });
 
 const journeyUrls = [
-	"https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv ",
+	"https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv",
 	"https://dev.hsl.fi/citybikes/od-trips-2021/2021-06.csv",
 	"https://dev.hsl.fi/citybikes/od-trips-2021/2021-07.csv",
 ];
 
 const stationUrl =
 	"https://opendata.arcgis.com/datasets/726277c507ef4914b0aec3cbcfcbfafc_0.csv";
-
-// Read the station CSV file, insert data to stations collection in db
-// needle
-// 	.get(stationUrl)
-// 	.pipe(fastcsv.parse({ headers: true }))
-// 	.on("error", (error) => console.error(error))
-// 	.on("data", function (data) {
-// 		const doc = new Station(data);
-// 		doc.save((error) => {
-// 			if (error) {
-// 				console.error(error);
-// 			}
-// 		});
-// 	})
-// 	.on("end", function () {
-// 		console.log(` stations have been successfully uploaded`);
-// 	});
 
 const fetchJourney = (url) => {
 	fetch(url)
@@ -85,9 +68,14 @@ const fetchJourney = (url) => {
 		});
 };
 
-journeyUrls.forEach((url) => {
-	fetchJourney(url);
-});
+const insertJourneyToMongoDB = async () => {
+	await fetchJourney("https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv");
+	await fetchJourney("https://dev.hsl.fi/citybikes/od-trips-2021/2021-06.csv");
+	await fetchJourney("https://dev.hsl.fi/citybikes/od-trips-2021/2021-07.csv");
+	mongoose.connection.close();
+};
+
+insertJourneyToMongoDB();
 
 // fetch stations from db
 app.get("/stations", (req, res) => {
