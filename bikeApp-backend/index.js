@@ -4,17 +4,17 @@ const express = require("express");
 const app = express();
 const csvtojson = require("csvtojson");
 const mongoose = require("mongoose");
-const fs = require("fs");
-const path = require("path");
 const fastcsv = require("fast-csv");
 const https = require("https");
 const axios = require("axios");
 const needle = require("needle");
 const fetch = require("node-fetch");
-const csv = require("csv-parser");
 
 const Journey = require("./models/journey");
 const Station = require("./models/station");
+const { readdirSync } = require("fs");
+
+app.use(express.json());
 
 mongoose.set("strictQuery", false);
 
@@ -98,12 +98,10 @@ const insertDataToMongoDB = async () => {
 
 mongoose.connection.on("open", function (ref) {
 	mongoose.connection.db.listCollections().toArray(function (error, names) {
-		console.log("names", names);
 		const result = names.some(
 			(collection) =>
 				collection.name === "stations" || collection.name === "journeys",
 		);
-		console.log("result", result);
 		if (result) {
 			return;
 		} else {
@@ -113,34 +111,86 @@ mongoose.connection.on("open", function (ref) {
 	});
 });
 
-function checkDatabase(bikeApp) {
-	let alreadyExist;
-
-	new Admin(mongoose.connection.db).listDatabases((err, result) => {
-		let allDatabases = result.databases;
-		console.log("allDataBases", allDatabases);
-		alreadyExist = allDatabases.some((database) => database.name === "bikeApp");
-		return alreadyExist;
-	});
-}
-
 // fetch stations from db
-app.get("/stations", (req, res) => {
-	Station.find((error, data) => {
-		if (error) {
-			console.error(error);
+app.get("/api/stations", async (req, res) => {
+	try {
+		let query = Station.find();
+		const page = parseInt(req.query.page) || 1;
+		const pageSize = parseInt(req.query.limit) || 50;
+		const skip = (page - 1) * pageSize;
+		const total = await Station.countDocuments();
+
+		const pages = Math.ceil(total / pageSize);
+
+		query = query.skip(skip).limit(pageSize);
+
+		if (page > pages) {
+			return res.status(404).json({
+				status: "fail",
+				message: "No page found",
+			});
 		}
-		res.json(data);
+
+		const result = await query;
+
+		res.status(200).json({
+			status: "success",
+			count: result.length,
+			page,
+			pages,
+			data: result,
+		});
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({
+			status: "error",
+			message: "Server error",
+		});
+	}
+});
+
+app.get("/api/stations/:id", (req, res) => {
+	const id = req.params.id;
+	const station = Station.findById(id).then((result) => {
+		console.log(result);
+		res.json(result);
 	});
 });
 
 // fetch journeys from db
-app.get("/journeys", (req, res) => {
-	Journey.find({}).then((data) => {
-		return res.json(data);
+app.get("/api/journeys", async (req, res) => {
+	try {
+		let query = Journey.find();
+		const page = parseInt(req.query.page);
+		const pageSize = parseInt(req.query.limit) || 50;
+		const skip = (page - 1) * pageSize;
+		const total = await Journey.countDocuments();
+		const pages = Math.ceil(total / pageSize);
+
+		query = query.skip(skip).limit(pageSize);
+
+		let result = await query;
+
+		return res.status(200).json({
+			status: "success",
+			count: result.length,
+			page,
+			pages,
+			data: result,
+		});
+	} catch (error) {
+		console.log(error);
+	}
+});
+
+app.get("/api/journeys/:id", (req, res) => {
+	const id = req.params.id;
+	const journey = Journey.findById(id).then((result) => {
+		console.log(result);
+		res.json(result);
 	});
 });
 
-const PORT = 3003;
+const PORT = process.env.PORT || 3003;
 app.listen(PORT);
 console.log(`Server running on port ${PORT}`);
