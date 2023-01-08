@@ -145,12 +145,11 @@ app.get("/api/stations", async (req, res) => {
 	}
 });
 
-app.get("/api/stations/:id", (req, res) => {
+app.get("/api/stations/:id", async (req, res) => {
 	const id = req.params.id;
-	const station = Station.findById(id).then((result) => {
-		console.log(result);
-		res.json(result);
-	});
+	const station = await Station.findById(id);
+	console.log("station", station);
+	res.json(result);
 });
 
 // fetch journeys from db
@@ -180,12 +179,33 @@ app.get("/api/journeys", async (req, res) => {
 	}
 });
 
-app.get("/api/journeys/:id", (req, res) => {
-	const id = req.params.id;
-	const journey = Journey.findById(id).then((result) => {
-		console.log(result);
-		res.json(result);
-	});
+app.get("/api/journeys/search", async (req, res) => {
+	const { search, tags } = req.query;
+
+	console.log("search", search);
+	console.log("tags", tags);
+
+	try {
+		const searchTerm = new RegExp(search, "i");
+
+		const journeys = await Journey.find({
+			$or: [
+				{ Departure_station_name: searchTerm },
+				{ Return_station_name: searchTerm },
+			],
+		});
+		const documentCount = journeys.length;
+
+		console.log("journeys", journeys);
+		res.json({
+			documentCount,
+			data: journeys,
+		});
+	} catch (error) {
+		res.status(404).json({
+			message: error.message,
+		});
+	}
 });
 
 const PORT = process.env.PORT || 3003;

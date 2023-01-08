@@ -1,10 +1,17 @@
 import React from "react";
 import Pagination from "./Pagination";
 import { useState, useEffect } from "react";
-import { Routes, Route, Link, useParams } from "react-router-dom";
+import { Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import TablePagination from "@mui/material/TablePagination";
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import {
+	DataGrid,
+	GridColDef,
+	GridValueGetterParams,
+	GridRowParams,
+	GridToolbar,
+	GridEventListener,
+} from "@mui/x-data-grid";
 
 const Stations = () => {
 	const [stations, setStations] = useState([]);
@@ -15,6 +22,7 @@ const Stations = () => {
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [pageSize, setPageSize] = useState(50);
 
+	const navigate = useNavigate();
 	useEffect(() => {
 		const fetchStations = async () => {
 			setLoading(true);
@@ -22,7 +30,7 @@ const Stations = () => {
 				const res = await fetch(`/api/stations`);
 
 				const { data, pages: totalPages } = await res.json();
-				console.log(data);
+
 				setPages(totalPages);
 				setStations(data);
 				setLoading(false);
@@ -85,6 +93,17 @@ const Stations = () => {
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
 	};
+
+	const handleRowClick: GridEventListener<"rowClick"> = (
+		params,
+		event,
+		details,
+	) => {
+		console.log(`${params.row.id}`);
+		navigate(`/stations/${params.row.id}`, {
+			state: stations,
+		});
+	};
 	return (
 		<div>
 			<h2>Stations</h2>
@@ -100,6 +119,11 @@ const Stations = () => {
 					rowsPerPageOptions={[10, 25, 50, 100]}
 					onRowsPerPageChange={handleChangeRowsPerPage}
 					onPageChange={handleChangePage}
+					components={{
+						Toolbar: GridToolbar,
+					}}
+					disableSelectionOnClick
+					onRowClick={handleRowClick}
 				/>
 			</div>
 		</div>

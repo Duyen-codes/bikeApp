@@ -7,6 +7,7 @@ import axios from "axios";
 import Stations from "./components/Stations";
 import Home from "./components/Home";
 import Journeys from "./components/Journeys";
+import StationDetails from "./components/StationDetails";
 
 const App = () => {
 	return (
@@ -21,6 +22,7 @@ const App = () => {
 				<Route path='/' element={<Home />} />
 				<Route path='stations' element={<Stations />} />
 				<Route path='journeys' element={<Journeys />} />
+				<Route path='stations/:stationId' element={<StationDetails />} />
 			</Routes>
 		</div>
 	);

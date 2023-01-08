@@ -1,9 +1,20 @@
 import React from "react";
 
 import { useState, useEffect } from "react";
-import { Routes, Route, Link, useParams } from "react-router-dom";
+import { Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import {
+	DataGrid,
+	GridColDef,
+	GridValueGetterParams,
+	GridRowParams,
+	GridToolbar,
+	GridEventListener,
+} from "@mui/x-data-grid";
+import LinearProgress from "@mui/material/LinearProgress";
+import { TextField } from "@mui/material";
+import Chip from "@mui/material/Chip";
+import Button from "@mui/material/Button";
 
 const Stations = () => {
 	const [journeys, setJourneys] = useState([]);
@@ -11,31 +22,51 @@ const Stations = () => {
 	const [notification, setNotification] = useState(false);
 	const [page, setPage] = useState(0);
 	const [pages, setPages] = useState(1);
-	const [pageSize, setPageSize] = useState(100);
+	const [pageSize, setPageSize] = useState(50);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [rowCount, setRowCount] = useState(0);
+	const [tags, setTags] = useState([]);
+	const [search, setSearch] = useState("");
 
+	const navigate = useNavigate();
+
+	const fetchJourneys = async () => {
+		setLoading(true);
+		try {
+			const res = await fetch(
+				`/api/journeys?page=${page}?limit=${rowsPerPage}`,
+			);
+
+			const { data, pages: totalPages, documentCount } = await res.json();
+			setPages(totalPages);
+			setJourneys(data);
+			setRowCount(documentCount);
+			setLoading(false);
+		} catch (error) {
+			setLoading(false);
+			setNotification("Some error occurred");
+		}
+	};
 	useEffect(() => {
-		const fetchJourneys = async () => {
-			setLoading(true);
-			try {
-				const res = await fetch(
-					`/api/journeys?page=${page}?limit=${rowsPerPage}`,
-				);
-
-				const { data, pages: totalPages, documentCount } = await res.json();
-				setPages(totalPages);
-				setJourneys(data);
-				setRowCount(documentCount);
-				setLoading(false);
-			} catch (error) {
-				setLoading(false);
-				setNotification("Some error occurred");
-			}
-		};
-
 		fetchJourneys();
-	}, [page]);
+	}, [page, search]);
+
+	const getJourneysBySearch = async (searchQuery) => {
+		console.log("searchQuery", searchQuery);
+		console.log("searchQuery.search", searchQuery.search);
+		// const res = await fetch(
+		// 	`/api/journeys/search?page=${page}?limit=${rowsPerPage}?search=${
+		// 		searchQuery.search || "none"
+		// 	}&tags=${searchQuery.tags}`,
+		// );
+
+		const res = await fetch(
+			`/api/journeys/search?search=${searchQuery.search || "none"}`,
+		);
+		const { data, documentCount } = await res.json();
+		setJourneys(data);
+		setRowCount(documentCount);
+	};
 
 	const columns: GridColDef[] = [
 		{
@@ -92,9 +123,39 @@ const Stations = () => {
 		setPage(newPage);
 	};
 
+	const handleAdd = (tag) => setTags([...tags, tag]);
+
+	const handleDelete = (tagToDelete) =>
+		setTags(tags.filter((tag) => tag !== tagToDelete));
+
+	const searchJourney = () => {
+		if (search.trim() || tags) {
+			console.log("search", search);
+			getJourneysBySearch({ search, tags: tags.join(",") });
+		} else {
+			navigate("/");
+		}
+	};
+
 	return (
 		<div>
 			<h2>Journeys</h2>
+			<TextField
+				value={search}
+				onChange={({ target }) => setSearch(target.value)}
+				placeholder='Search...'
+			/>
+			<Chip
+				value={tags}
+				onAdd={handleAdd}
+				onDelete={handleDelete}
+				label='Search Tags'
+				variant='outlined'
+			/>
+			<Button onClick={searchJourney} variant='contained' color='primary'>
+				{" "}
+				search
+			</Button>
 			<div style={{ height: 500, width: "100%" }}>
 				<DataGrid
 					filterMode='server'
@@ -108,6 +169,11 @@ const Stations = () => {
 					rowsPerPageOptions={[10, 25, 50, 100]}
 					onRowsPerPageChange={handleChangeRowsPerPage}
 					onPageChange={handleChangePage}
+					components={{
+						Toolbar: GridToolbar,
+						LoadingOverlay: LinearProgress,
+					}}
+					disableSelectionOnClick
 				/>
 			</div>
 		</div>
