@@ -12,6 +12,7 @@ import {
 	GridToolbar,
 	GridEventListener,
 } from "@mui/x-data-grid";
+import { Container } from "@mui/system";
 
 const Stations = () => {
 	const [stations, setStations] = useState([]);
@@ -107,25 +108,26 @@ const Stations = () => {
 	return (
 		<div>
 			<h2>Stations</h2>
-
-			<div style={{ height: 500, width: "100%" }}>
-				<DataGrid
-					loading={loading}
-					rows={rows}
-					rowCount={stations.length}
-					columns={columns}
-					pageSize={pageSize}
-					onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-					rowsPerPageOptions={[10, 25, 50, 100]}
-					onRowsPerPageChange={handleChangeRowsPerPage}
-					onPageChange={handleChangePage}
-					components={{
-						Toolbar: GridToolbar,
-					}}
-					disableSelectionOnClick
-					onRowClick={handleRowClick}
-				/>
-			</div>
+			<Container>
+				<div style={{ height: 500, width: "100%" }}>
+					<DataGrid
+						loading={loading}
+						rows={rows}
+						rowCount={stations.length}
+						columns={columns}
+						pageSize={pageSize}
+						onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+						rowsPerPageOptions={[10, 25, 50, 100]}
+						onRowsPerPageChange={handleChangeRowsPerPage}
+						onPageChange={handleChangePage}
+						components={{
+							Toolbar: GridToolbar,
+						}}
+						disableSelectionOnClick
+						onRowClick={handleRowClick}
+					/>
+				</div>
+			</Container>
 		</div>
 	);
 };

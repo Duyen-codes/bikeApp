@@ -9,13 +9,22 @@ import {
 	GridValueGetterParams,
 	GridRowParams,
 	GridToolbar,
+	GridToolbarContainer,
+	GridToolbarColumnsButton,
+	GridToolbarFilterButton,
+	GridToolbarExport,
+	GridToolbarDensitySelector,
 } from "@mui/x-data-grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import { TextField } from "@mui/material";
-
+import SearchIcon from "@mui/icons-material/Search";
+import { IconButton, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
+import { Container } from "@mui/system";
 
-const Stations = () => {
+const Journeys = () => {
 	const [journeys, setJourneys] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [notification, setNotification] = useState(false);
@@ -32,6 +41,7 @@ const Stations = () => {
 	const fetchJourneys = async () => {
 		setLoading(true);
 		try {
+			setLoading(true);
 			const res = await fetch(
 				`/api/journeys?page=${page}?limit=${rowsPerPage}`,
 			);
@@ -56,6 +66,7 @@ const Stations = () => {
 		console.log("searchQuery", searchQuery);
 		console.log("searchQuery.search", searchQuery.search);
 		try {
+			setLoading(true);
 			const res = await fetch(
 				`/api/journeys/search?search=${searchQuery.search || "none"}`,
 			);
@@ -124,7 +135,9 @@ const Stations = () => {
 		setPage(newPage);
 	};
 
-	const searchJourney = () => {
+	const searchJourney = (e) => {
+		e.preventDefault();
+		console.log("form submitted");
 		if (search.trim()) {
 			console.log("search", search);
 			getJourneysBySearch({ search });
@@ -135,40 +148,73 @@ const Stations = () => {
 
 	return (
 		<div>
-			<h2>Journeys</h2>
-			<TextField
-				value={search}
-				onChange={({ target }) => setSearch(target.value)}
-				placeholder='Search...'
-			/>
+			<Typography align='center' variant='h2'>
+				Journeys
+			</Typography>
 
-			<Button onClick={searchJourney} variant='contained' color='primary'>
-				{" "}
-				search
-			</Button>
+			<Container>
+				<div>
+					<form
+						onSubmit={searchJourney}
+						sx={{ display: "flex", alignItems: "flex-end" }}
+					>
+						<Box sx={{ display: "flex", alignItems: "flex-end" }}>
+							<SearchIcon sx={{ mr: 1, my: 0.5 }} />
 
-			<div style={{ height: 500, width: "100%" }}>
-				<DataGrid
-					filterMode='server'
-					loading={loading}
-					rows={rows}
-					page={page}
-					rowCount={rowCount}
-					columns={columns}
-					pageSize={pageSize}
-					onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-					rowsPerPageOptions={[10, 25, 50, 100]}
-					onRowsPerPageChange={handleChangeRowsPerPage}
-					onPageChange={handleChangePage}
-					components={{
-						Toolbar: GridToolbar,
-						LoadingOverlay: LinearProgress,
-					}}
-					disableSelectionOnClick
-				/>
-			</div>
+							<TextField
+								id='standard-basic'
+								label='Search'
+								value={search}
+								onChange={({ target }) => setSearch(target.value)}
+								variant='standard'
+								size='small'
+							/>
+						</Box>
+					</form>
+				</div>
+				<div style={{ height: 500, width: "100%" }}>
+					<DataGrid
+						loading={loading}
+						rows={rows}
+						page={page}
+						rowCount={rowCount}
+						columns={columns}
+						pageSize={pageSize}
+						onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+						rowsPerPageOptions={[10, 25, 50, 100]}
+						onRowsPerPageChange={handleChangeRowsPerPage}
+						onPageChange={handleChangePage}
+						components={{
+							Toolbar: () => (
+								<CustomToolbar
+									search={search}
+									setSearch={setSearch}
+									searchJourney={searchJourney}
+								/>
+							),
+							LoadingOverlay: LinearProgress,
+						}}
+						disableSelectionOnClick
+					/>
+				</div>
+			</Container>
 		</div>
 	);
 };
 
-export default Stations;
+export default Journeys;
+
+function CustomToolbar({ search, setSearch, searchJourney }) {
+	return (
+		<GridToolbarContainer>
+			<GridToolbarColumnsButton />
+			<GridToolbarFilterButton />
+			<GridToolbarDensitySelector />
+			<GridToolbarExport />
+
+			<Button variant='text' startIcon={<AddIcon />}>
+				Add Journey
+			</Button>
+		</GridToolbarContainer>
+	);
+}
