@@ -3,16 +3,27 @@ import Pagination from "./Pagination";
 import { useState, useEffect } from "react";
 import { Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import TablePagination from "@mui/material/TablePagination";
+
 import {
 	DataGrid,
 	GridColDef,
 	GridValueGetterParams,
 	GridRowParams,
 	GridToolbar,
-	GridEventListener,
+	GridToolbarContainer,
+	GridToolbarColumnsButton,
+	GridToolbarFilterButton,
+	GridToolbarExport,
+	GridToolbarDensitySelector,
 } from "@mui/x-data-grid";
+import LinearProgress from "@mui/material/LinearProgress";
 import { Container } from "@mui/system";
+import { TextField } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import { IconButton, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
 
 const Stations = () => {
 	const [stations, setStations] = useState([]);
@@ -22,6 +33,8 @@ const Stations = () => {
 	const [pages, setPages] = useState(1);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [pageSize, setPageSize] = useState(50);
+
+	const [search, setSearch] = useState("");
 
 	const navigate = useNavigate();
 	useEffect(() => {
@@ -43,7 +56,7 @@ const Stations = () => {
 		};
 
 		fetchStations();
-	}, [page]);
+	}, [page, search]);
 
 	const columns: GridColDef[] = [
 		{
@@ -105,10 +118,44 @@ const Stations = () => {
 			state: stations,
 		});
 	};
+
+	const searchStation = (e) => {
+		e.preventDefault();
+
+		const searchResult = stations.filter(
+			(station) =>
+				station.Name.toLowerCase() === search.toLowerCase() ||
+				station.Adress.toLowerCase() === search.toLowerCase(),
+		);
+
+		setStations(searchResult);
+	};
+
 	return (
 		<div>
-			<h2>Stations</h2>
+			<Typography align='center' variant='h2'>
+				Stations
+			</Typography>
 			<Container>
+				<div>
+					<form
+						onSubmit={searchStation}
+						sx={{ display: "flex", alignItems: "flex-end" }}
+					>
+						<Box sx={{ display: "flex", alignItems: "flex-end" }}>
+							<SearchIcon sx={{ mr: 1, my: 0.5 }} />
+
+							<TextField
+								id='standard-basic'
+								label='Search'
+								value={search}
+								onChange={({ target }) => setSearch(target.value)}
+								variant='standard'
+								size='small'
+							/>
+						</Box>
+					</form>
+				</div>
 				<div style={{ height: 500, width: "100%" }}>
 					<DataGrid
 						loading={loading}
@@ -121,7 +168,10 @@ const Stations = () => {
 						onRowsPerPageChange={handleChangeRowsPerPage}
 						onPageChange={handleChangePage}
 						components={{
-							Toolbar: GridToolbar,
+							Toolbar: () => (
+								<CustomToolbar search={search} setSearch={setSearch} />
+							),
+							LoadingOverlay: LinearProgress,
 						}}
 						disableSelectionOnClick
 						onRowClick={handleRowClick}
@@ -133,3 +183,18 @@ const Stations = () => {
 };
 
 export default Stations;
+
+function CustomToolbar() {
+	return (
+		<GridToolbarContainer>
+			<GridToolbarColumnsButton />
+			<GridToolbarFilterButton />
+			<GridToolbarDensitySelector />
+			<GridToolbarExport />
+
+			<Button variant='text' startIcon={<AddIcon />}>
+				Add Station
+			</Button>
+		</GridToolbarContainer>
+	);
+}

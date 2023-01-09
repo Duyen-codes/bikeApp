@@ -204,7 +204,7 @@ const Journeys = () => {
 
 export default Journeys;
 
-function CustomToolbar({ search, setSearch, searchJourney }) {
+function CustomToolbar() {
 	return (
 		<GridToolbarContainer>
 			<GridToolbarColumnsButton />
