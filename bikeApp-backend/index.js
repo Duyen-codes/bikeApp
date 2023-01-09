@@ -147,9 +147,20 @@ app.get("/api/stations", async (req, res) => {
 
 app.get("/api/stations/:id", async (req, res) => {
 	const id = req.params.id;
+	console.log("id", id);
 	const station = await Station.findById(id);
 	console.log("station", station);
-	res.json(result);
+
+	const departuresFromStation = await Journey.countDocuments({
+		Departure_station_id: station.ID,
+	});
+
+	const returnsAtStation = await Journey.countDocuments({
+		Return_station_id: station.ID,
+	});
+	console.log(departuresFromStation);
+	console.log(returnsAtStation);
+	res.json({ station, departuresFromStation, returnsAtStation });
 });
 
 // fetch journeys from db
