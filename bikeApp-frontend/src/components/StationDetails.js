@@ -9,7 +9,7 @@ const StationDetails = () => {
 	const [station, setStation] = useState(
 		state.find((item) => item.id === stationId),
 	);
-	const [isLoading, setIsLoading] = useState(true);
+	const [loading, setLoading] = useState(true);
 	const [departuresFromStation, setDeparturesFromStation] = useState();
 	const [returnsAtStation, setReturnsAtStation] = useState();
 	const fetchStationData = async () => {
@@ -20,7 +20,7 @@ const StationDetails = () => {
 			setDeparturesFromStation(departuresFromStation);
 			setReturnsAtStation(returnsAtStation);
 			console.log(returnsAtStation);
-			setIsLoading(false);
+			setLoading(false);
 		} catch (error) {
 			console.log(error);
 		}
@@ -29,13 +29,16 @@ const StationDetails = () => {
 		fetchStationData();
 	}, [stationId]);
 
+	if (loading) {
+		return <p>loading...</p>;
+	}
 	return (
 		<div>
 			<h1>station details</h1>
 			<p>Name: {station.Name}</p>
 			<p>Address: {station.Adress}</p>
-			{isLoading && <p>Loading data...</p>}
-			{!isLoading && (
+
+			{!loading && (
 				<>
 					<p>
 						Total number of journeys starting from the station:

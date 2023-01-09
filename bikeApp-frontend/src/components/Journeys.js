@@ -2,18 +2,17 @@ import React from "react";
 
 import { useState, useEffect } from "react";
 import { Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+
 import {
 	DataGrid,
 	GridColDef,
 	GridValueGetterParams,
 	GridRowParams,
 	GridToolbar,
-	GridEventListener,
 } from "@mui/x-data-grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import { TextField } from "@mui/material";
-import Chip from "@mui/material/Chip";
+
 import Button from "@mui/material/Button";
 
 const Stations = () => {
@@ -25,7 +24,7 @@ const Stations = () => {
 	const [pageSize, setPageSize] = useState(50);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [rowCount, setRowCount] = useState(0);
-	const [tags, setTags] = useState([]);
+
 	const [search, setSearch] = useState("");
 
 	const navigate = useNavigate();
@@ -52,20 +51,22 @@ const Stations = () => {
 	}, [page, search]);
 
 	const getJourneysBySearch = async (searchQuery) => {
+		setLoading(true);
+
 		console.log("searchQuery", searchQuery);
 		console.log("searchQuery.search", searchQuery.search);
-		// const res = await fetch(
-		// 	`/api/journeys/search?page=${page}?limit=${rowsPerPage}?search=${
-		// 		searchQuery.search || "none"
-		// 	}&tags=${searchQuery.tags}`,
-		// );
-
-		const res = await fetch(
-			`/api/journeys/search?search=${searchQuery.search || "none"}`,
-		);
-		const { data, documentCount } = await res.json();
-		setJourneys(data);
-		setRowCount(documentCount);
+		try {
+			const res = await fetch(
+				`/api/journeys/search?search=${searchQuery.search || "none"}`,
+			);
+			const { data, documentCount } = await res.json();
+			setJourneys(data);
+			setRowCount(documentCount);
+			setLoading(false);
+		} catch (error) {
+			setLoading(false);
+			setNotification("Some error occurred");
+		}
 	};
 
 	const columns: GridColDef[] = [
@@ -123,15 +124,10 @@ const Stations = () => {
 		setPage(newPage);
 	};
 
-	const handleAdd = (tag) => setTags([...tags, tag]);
-
-	const handleDelete = (tagToDelete) =>
-		setTags(tags.filter((tag) => tag !== tagToDelete));
-
 	const searchJourney = () => {
-		if (search.trim() || tags) {
+		if (search.trim()) {
 			console.log("search", search);
-			getJourneysBySearch({ search, tags: tags.join(",") });
+			getJourneysBySearch({ search });
 		} else {
 			navigate("/");
 		}
@@ -145,17 +141,12 @@ const Stations = () => {
 				onChange={({ target }) => setSearch(target.value)}
 				placeholder='Search...'
 			/>
-			<Chip
-				value={tags}
-				onAdd={handleAdd}
-				onDelete={handleDelete}
-				label='Search Tags'
-				variant='outlined'
-			/>
+
 			<Button onClick={searchJourney} variant='contained' color='primary'>
 				{" "}
 				search
 			</Button>
+
 			<div style={{ height: 500, width: "100%" }}>
 				<DataGrid
 					filterMode='server'

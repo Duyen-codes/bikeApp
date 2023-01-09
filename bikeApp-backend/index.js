@@ -12,16 +12,22 @@ const fetch = require("node-fetch");
 
 const Journey = require("./models/journey");
 const Station = require("./models/station");
-const { readdirSync } = require("fs");
+
+const { v1: uuid } = require("uuid");
 
 app.use(express.json());
 
 mongoose.set("strictQuery", false);
 
 // Connect to the MongoDB cluster
-mongoose.connect(process.env.MONGODB_URI).then(() => {
-	console.log("connected to", process.env.MONGODB_URI);
-});
+mongoose
+	.connect(process.env.MONGODB_URI)
+	.then(() => {
+		console.log("connected to", process.env.MONGODB_URI);
+	})
+	.catch((error) => {
+		console.log("error connecting to MongoDB: ", error.message);
+	});
 
 const journeyUrls = [
 	"https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv",
@@ -160,7 +166,16 @@ app.get("/api/stations/:id", async (req, res) => {
 	});
 	console.log(departuresFromStation);
 	console.log(returnsAtStation);
+
 	res.json({ station, departuresFromStation, returnsAtStation });
+});
+
+app.post("/api/stations", (req, res) => {
+	const station = new Station(req.body);
+	station.save().then((result) => {
+		console.log("result", result);
+		res.json(result);
+	});
 });
 
 // fetch journeys from db
@@ -191,10 +206,9 @@ app.get("/api/journeys", async (req, res) => {
 });
 
 app.get("/api/journeys/search", async (req, res) => {
-	const { search, tags } = req.query;
+	const { search } = req.query;
 
 	console.log("search", search);
-	console.log("tags", tags);
 
 	try {
 		const searchTerm = new RegExp(search, "i");
@@ -217,6 +231,14 @@ app.get("/api/journeys/search", async (req, res) => {
 			message: error.message,
 		});
 	}
+});
+
+// endpoint to store new journey
+app.post("/api/journeys", (req, res) => {
+	const journey = new Journey(req.body);
+	journey.save().then((result) => {
+		res.status(201).json(result);
+	});
 });
 
 const PORT = process.env.PORT || 3003;
