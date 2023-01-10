@@ -92,7 +92,6 @@ const Journeys = () => {
 	};
 
 	let rows = journeys.map((journey) => {
-		console.log("journey", journey);
 		return {
 			id: journey.id,
 			departureTime: journey.Departure,

@@ -8,14 +8,13 @@ import Stations from "./components/Stations";
 import Home from "./components/Home";
 import Journeys from "./components/Journeys";
 import StationDetails from "./components/StationDetails";
+
 import NavBar from "./components/NavBar";
-import Nav from "./components/Nav";
 
 const App = () => {
 	return (
 		<div className='App'>
 			<NavBar />
-			<Nav />
 			<Routes>
 				<Route path='/' element={<Home />} />
 				<Route path='stations' element={<Stations />} />
