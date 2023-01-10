@@ -1,21 +1,27 @@
-const journeysRouter = require("express").Router();
+const router = require("express").Router();
 
 const Journey = require("../models/journey");
 const Station = require("../models/station");
 
 // fetch journeys from db
-journeysRouter.get("/", async (req, res) => {
+router.get("/", async (req, res) => {
 	try {
 		let query = Journey.find();
 		const page = parseInt(req.query.page);
+		console.log("req.query.page: ", req.query.page);
+		console.log("req.query.limit: ", req.query.limit);
 		const pageSize = parseInt(req.query.limit) || 50;
+		console.log("pageSize", pageSize);
 		const skip = page * pageSize;
+		console.log("skip", skip);
 		const total = await Journey.countDocuments();
 		const pages = Math.ceil(total / pageSize);
 
 		query = query.skip(skip).limit(pageSize);
 
 		let result = await query;
+
+		console.log("result.length", result.length);
 
 		return res.status(200).json({
 			status: "success",
@@ -30,7 +36,7 @@ journeysRouter.get("/", async (req, res) => {
 	}
 });
 
-journeysRouter.get("/search", async (req, res) => {
+router.get("/search", async (req, res) => {
 	const { search } = req.query;
 
 	console.log("search", search);
@@ -59,7 +65,7 @@ journeysRouter.get("/search", async (req, res) => {
 });
 
 // endpoint to store new journey
-journeysRouter.post("/", async (req, res) => {
+router.post("/", async (req, res) => {
 	const journey = new Journey({ ...req.body });
 
 	const savedJourney = await journey.save();
@@ -67,4 +73,4 @@ journeysRouter.post("/", async (req, res) => {
 	res.status(201).json(savedJourney);
 });
 
-module.exports = journeysRouter;
+module.exports = router;

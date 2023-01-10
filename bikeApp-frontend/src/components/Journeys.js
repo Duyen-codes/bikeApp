@@ -6,9 +6,7 @@ import { Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
 import {
 	DataGrid,
 	GridColDef,
-	GridValueGetterParams,
-	GridRowParams,
-	GridToolbar,
+	GridRowsProps,
 	GridToolbarContainer,
 	GridToolbarColumnsButton,
 	GridToolbarFilterButton,
@@ -18,7 +16,7 @@ import {
 import LinearProgress from "@mui/material/LinearProgress";
 import { TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { IconButton, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -52,15 +50,16 @@ const Journeys = () => {
 	const navigate = useNavigate();
 
 	const fetchJourneys = async () => {
+		console.log("fetching journeys...");
 		setLoading(true);
 		try {
 			setLoading(true);
-			const res = await fetch(
-				`/api/journeys?page=${page}?limit=${rowsPerPage}`,
-			);
+			const res = await fetch(`/api/journeys?page=${page}&limit=${pageSize}`);
+			console.log("pageSize", pageSize);
 
-			const { data, pages: totalPages, documentCount } = await res.json();
-			setPages(totalPages);
+			const { data, pages, documentCount } = await res.json();
+			console.log("data", data);
+			setPages(pages);
 			setJourneys(data);
 			setRowCount(documentCount);
 			setLoading(false);
@@ -71,7 +70,7 @@ const Journeys = () => {
 	};
 	useEffect(() => {
 		fetchJourneys();
-	}, [page, search]);
+	}, [page, search, pageSize]);
 
 	const getJourneysBySearch = async (searchQuery) => {
 		setLoading(true);
@@ -118,6 +117,7 @@ const Journeys = () => {
 			field: "coveredDistance",
 			headerName: "Covered distance (km)",
 			width: 180,
+			type: "number",
 		},
 		{
 			field: "duration",
@@ -126,7 +126,8 @@ const Journeys = () => {
 		},
 	];
 
-	const rows = journeys.map((journey) => {
+	const rows: GridRowsProps = journeys.map((journey) => {
+		console.log("journey", journey);
 		return {
 			id: journey.id,
 			departureTime: journey.Departure,
@@ -138,12 +139,13 @@ const Journeys = () => {
 		};
 	});
 
-	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(parseInt(event.target.value, 10));
-		setPage(0);
-	};
+	// const handleChangeRowsPerPage = (event) => {
+	// 	setRowsPerPage(parseInt(event.target.value, 10));
+	// 	setPage(0);
+	// };
 
 	const handleChangePage = (newPage) => {
+		console.log("handleChangePage");
 		console.log("newPage", newPage);
 		setPage(newPage);
 	};
@@ -196,13 +198,12 @@ const Journeys = () => {
 						loading={loading}
 						rows={rows}
 						page={page}
+						onPageChange={handleChangePage}
 						rowCount={rowCount}
 						columns={columns}
 						pageSize={pageSize}
 						onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
 						rowsPerPageOptions={[10, 25, 50, 100]}
-						onRowsPerPageChange={handleChangeRowsPerPage}
-						onPageChange={handleChangePage}
 						components={{
 							Toolbar: () => (
 								<CustomToolbar

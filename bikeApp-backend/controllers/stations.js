@@ -1,10 +1,10 @@
-const stationsRouter = require("express").Router();
+const router = require("express").Router();
 
 const Journey = require("../models/journey");
 const Station = require("../models/station");
 
 // fetch stations from db
-stationsRouter.get("/", async (req, res) => {
+router.get("/", async (req, res) => {
 	try {
 		let result = await Station.find({});
 
@@ -20,7 +20,7 @@ stationsRouter.get("/", async (req, res) => {
 	}
 });
 
-stationsRouter.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
 	const id = req.params.id;
 	console.log("id", id);
 	const station = await Station.findById(id);
@@ -39,7 +39,7 @@ stationsRouter.get("/:id", async (req, res) => {
 	res.json({ station, departuresFromStation, returnsAtStation });
 });
 
-stationsRouter.post("/", (req, res) => {
+router.post("/", (req, res) => {
 	const station = new Station(req.body);
 	station.save().then((result) => {
 		console.log("result", result);
@@ -47,4 +47,4 @@ stationsRouter.post("/", (req, res) => {
 	});
 });
 
-module.exports = stationsRouter;
+module.exports = router;
