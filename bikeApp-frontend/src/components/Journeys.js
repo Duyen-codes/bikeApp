@@ -37,9 +37,6 @@ const Journeys = () => {
 
 	const [open, setOpen] = useState(false);
 
-	const [rowsData, setRowsData] = useState([]);
-	let rows;
-
 	const handleClickOpen = () => {
 		console.log("open click");
 		setOpen(true);
@@ -67,20 +64,6 @@ const Journeys = () => {
 
 			setRowCount(documentCount);
 			setLoading(false);
-
-			let rows: GridRowsProps = data.map((journey) => {
-				console.log("journey", journey);
-				return {
-					id: journey.id,
-					departureTime: journey.Departure,
-					returnTime: journey.Return,
-					departureStation: journey.Departure_station_name,
-					returnStation: journey.Return_station_name,
-					coveredDistance: journey.Covered_distance / 1000,
-					duration: Math.floor(journey.Duration / 60),
-				};
-			});
-			setRowsData(rows);
 		} catch (error) {
 			setLoading(false);
 			setNotification("Some error occurred");
@@ -107,6 +90,19 @@ const Journeys = () => {
 			setNotification("Some error occurred");
 		}
 	};
+
+	let rows = journeys.map((journey) => {
+		console.log("journey", journey);
+		return {
+			id: journey.id,
+			departureTime: journey.Departure,
+			returnTime: journey.Return,
+			departureStation: journey.Departure_station_name,
+			returnStation: journey.Return_station_name,
+			coveredDistance: journey.Covered_distance / 1000,
+			duration: Math.floor(journey.Duration / 60),
+		};
+	});
 
 	const columns: GridColDef[] = [
 		{
@@ -167,7 +163,6 @@ const Journeys = () => {
 			navigate("/");
 		}
 	};
-	console.log("rows", rows);
 
 	return (
 		<div>
@@ -204,7 +199,7 @@ const Journeys = () => {
 				<div style={{ height: 500, width: "100%" }}>
 					<DataGrid
 						loading={loading}
-						rows={rowsData}
+						rows={rows}
 						page={page}
 						onPageChange={handleChangePage}
 						rowCount={rowCount}
