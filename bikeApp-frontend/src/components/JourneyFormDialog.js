@@ -13,6 +13,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DateTimePickerToolbar } from "@mui/x-date-pickers/DateTimePicker/DateTimePickerToolbar";
 import axios from "axios";
+import { Box } from "@mui/system";
+import Grid from "@mui/material/Grid";
 
 const JourneyFormDialog = ({ open, handleClose }) => {
 	const [departureTimestamp, setDepartureTimestamp] = React.useState(
@@ -21,9 +23,9 @@ const JourneyFormDialog = ({ open, handleClose }) => {
 
 	const [returnTimestamp, setReturnTimestamp] = useState(dayjs("2022-04-07"));
 
-	const [departureStationId, setDepartureStationId] = useState();
+	const [departureStationId, setDepartureStationId] = useState(0);
 	const [departureStationName, setDepartureStationName] = useState("");
-	const [returnStationId, setReturnStationId] = useState();
+	const [returnStationId, setReturnStationId] = useState(0);
 	const [returnStationName, setReturnStationName] = useState("");
 	const [coveredDistanceM, setCoveredDistanceM] = useState();
 	let durationSec = returnTimestamp.diff(departureTimestamp, "second");
@@ -55,27 +57,38 @@ const JourneyFormDialog = ({ open, handleClose }) => {
 					Fill in the form and hit add to store your journey.
 				</DialogContentText>
 				<LocalizationProvider dateAdapter={AdapterDayjs}>
-					<DateTimePicker
-						renderInput={(props) => <TextField {...props} />}
-						autoFocus
-						label='Departure time'
-						value={departureTimestamp}
-						onChange={(newValue) => {
-							setDepartureTimestamp(newValue);
+					<Grid
+						container
+						spacing={2}
+						sx={{
+							display: "flex",
+							justifyContent: "space-between",
+							marginTop: "1rem",
+							marginBottom: "1rem",
 						}}
-						showToolbar
-					/>
+					>
+						<DateTimePicker
+							renderInput={(props) => <TextField {...props} />}
+							autoFocus
+							label='Departure time'
+							value={departureTimestamp}
+							onChange={(newValue) => {
+								setDepartureTimestamp(newValue);
+							}}
+							showToolbar
+						/>
 
-					<DateTimePicker
-						renderInput={(props) => <TextField {...props} />}
-						autoFocus
-						label='Return time'
-						value={returnTimestamp}
-						onChange={(newValue) => {
-							setReturnTimestamp(newValue);
-						}}
-						showToolbar
-					/>
+						<DateTimePicker
+							renderInput={(props) => <TextField {...props} />}
+							autoFocus
+							label='Return time'
+							value={returnTimestamp}
+							onChange={(newValue) => {
+								setReturnTimestamp(newValue);
+							}}
+							showToolbar
+						/>
+					</Grid>
 				</LocalizationProvider>
 
 				<TextField
