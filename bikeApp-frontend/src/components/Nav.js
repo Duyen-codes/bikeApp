@@ -14,6 +14,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 
 const drawerWidth = 240;
 const navItems = ["Stations", "Journeys", "About"];
@@ -29,7 +30,7 @@ function DrawerAppBar(props) {
 	const drawer = (
 		<Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
 			<Typography variant='h6' sx={{ my: 2 }}>
-				MUI
+				CityBike
 			</Typography>
 			<Divider />
 			<List>
@@ -66,7 +67,7 @@ function DrawerAppBar(props) {
 						component='div'
 						sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
 					>
-						MUI
+						<DirectionsBikeIcon /> CityBike
 					</Typography>
 					<Box sx={{ display: { xs: "none", sm: "block" } }}>
 						{navItems.map((item) => (
