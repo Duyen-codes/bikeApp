@@ -23,6 +23,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import { Container } from "@mui/system";
+import JourneyFormDialog from "./JourneyFormDialog";
 
 const Journeys = () => {
 	const [journeys, setJourneys] = useState([]);
@@ -35,6 +36,18 @@ const Journeys = () => {
 	const [rowCount, setRowCount] = useState(0);
 
 	const [search, setSearch] = useState("");
+
+	const [open, setOpen] = useState(false);
+
+	const handleClickOpen = () => {
+		console.log("open click");
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		console.log("close click");
+		setOpen(false);
+	};
 
 	const navigate = useNavigate();
 
@@ -152,6 +165,12 @@ const Journeys = () => {
 				Journeys
 			</Typography>
 
+			<JourneyFormDialog
+				open={open}
+				setOpen={setOpen}
+				handleClose={handleClose}
+			/>
+
 			<Container>
 				<div>
 					<form
@@ -190,6 +209,8 @@ const Journeys = () => {
 									search={search}
 									setSearch={setSearch}
 									searchJourney={searchJourney}
+									handleClickOpen={handleClickOpen}
+									handleClose={handleClose}
 								/>
 							),
 							LoadingOverlay: LinearProgress,
@@ -204,7 +225,7 @@ const Journeys = () => {
 
 export default Journeys;
 
-function CustomToolbar() {
+function CustomToolbar({ handleClickOpen }) {
 	return (
 		<GridToolbarContainer>
 			<GridToolbarColumnsButton />
@@ -212,7 +233,7 @@ function CustomToolbar() {
 			<GridToolbarDensitySelector />
 			<GridToolbarExport />
 
-			<Button variant='text' startIcon={<AddIcon />}>
+			<Button variant='text' startIcon={<AddIcon />} onClick={handleClickOpen}>
 				Add Journey
 			</Button>
 		</GridToolbarContainer>

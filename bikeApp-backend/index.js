@@ -174,7 +174,7 @@ app.post("/api/stations", (req, res) => {
 	const station = new Station(req.body);
 	station.save().then((result) => {
 		console.log("result", result);
-		res.json(result);
+		res.status(201).json(result);
 	});
 });
 
@@ -234,11 +234,12 @@ app.get("/api/journeys/search", async (req, res) => {
 });
 
 // endpoint to store new journey
-app.post("/api/journeys", (req, res) => {
-	const journey = new Journey(req.body);
-	journey.save().then((result) => {
-		res.status(201).json(result);
-	});
+app.post("/api/journeys", async (req, res) => {
+	const journey = new Journey({ ...req.body });
+
+	const savedJourney = await journey.save();
+
+	res.status(201).json(savedJourney);
 });
 
 const PORT = process.env.PORT || 3003;
