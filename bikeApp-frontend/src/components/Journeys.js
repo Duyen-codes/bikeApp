@@ -37,6 +37,8 @@ const Journeys = () => {
 
 	const [open, setOpen] = useState(false);
 
+	const [rowsData, setRowsData] = useState([]);
+
 	const handleClickOpen = () => {
 		console.log("open click");
 		setOpen(true);
@@ -61,6 +63,7 @@ const Journeys = () => {
 			console.log("data", data);
 			setPages(pages);
 			setJourneys(data);
+			setRowsData(data);
 			setRowCount(documentCount);
 			setLoading(false);
 		} catch (error) {
@@ -68,9 +71,6 @@ const Journeys = () => {
 			setNotification("Some error occurred");
 		}
 	};
-	useEffect(() => {
-		fetchJourneys();
-	}, [page, search, pageSize]);
 
 	const getJourneysBySearch = async (searchQuery) => {
 		setLoading(true);
@@ -84,6 +84,7 @@ const Journeys = () => {
 			);
 			const { data, documentCount } = await res.json();
 			setJourneys(data);
+
 			setRowCount(documentCount);
 			setLoading(false);
 		} catch (error) {
@@ -126,7 +127,7 @@ const Journeys = () => {
 		},
 	];
 
-	const rows: GridRowsProps = journeys.map((journey) => {
+	const rows: GridRowsProps = rowsData.map((journey) => {
 		console.log("journey", journey);
 		return {
 			id: journey.id,
@@ -139,6 +140,11 @@ const Journeys = () => {
 		};
 	});
 
+	useEffect(() => {
+		fetchJourneys();
+	}, [page, search, pageSize]);
+
+	console.log("rows", rows);
 	// const handleChangeRowsPerPage = (event) => {
 	// 	setRowsPerPage(parseInt(event.target.value, 10));
 	// 	setPage(0);
