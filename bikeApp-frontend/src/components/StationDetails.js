@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef, Children } from "react";
 import axios from "axios";
 import { useLocation, useParams } from "react-router-dom";
+import { Container, Stack, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import GoogleMap from "./GoogleMap";
 
-const StationDetails = () => {
+const StationDetails = (props) => {
 	const { state } = useLocation();
 	const { stationId } = useParams();
 
@@ -12,6 +15,11 @@ const StationDetails = () => {
 	const [loading, setLoading] = useState(true);
 	const [departuresFromStation, setDeparturesFromStation] = useState();
 	const [returnsAtStation, setReturnsAtStation] = useState();
+
+	const [center, setCenter] = React.useState({
+		lat: 0,
+		lng: 0,
+	});
 	const fetchStationData = async () => {
 		try {
 			const res = await fetch(`/api/stations/${stationId}`);
@@ -20,6 +28,7 @@ const StationDetails = () => {
 			setDeparturesFromStation(departuresFromStation);
 			setReturnsAtStation(returnsAtStation);
 			console.log(returnsAtStation);
+			setCenter({ lat: station.x, lng: station.y });
 			setLoading(false);
 		} catch (error) {
 			console.log(error);
@@ -30,26 +39,29 @@ const StationDetails = () => {
 	}, [stationId]);
 
 	if (loading) {
-		return <p>loading...</p>;
+		return <Box sx={{ pt: "7rem" }}>loading...</Box>;
 	}
-	return (
-		<div>
-			<h1>station details</h1>
-			<p>Name: {station.Name}</p>
-			<p>Address: {station.Adress}</p>
 
-			{!loading && (
-				<>
-					<p>
-						Total number of journeys starting from the station:
-						{departuresFromStation}
-					</p>
-					<p>
-						Total number of journeys ending at the station: {returnsAtStation}
-					</p>
-				</>
-			)}
-		</div>
+	return (
+		<Container sx={{ width: "100vw", paddingTop: "7rem" }}>
+			<div style={{ textAlign: "center" }}>
+				<Typography variant='h2'>{station.Name}</Typography>
+				<Typography sx={{ fontWeight: "bold" }}>
+					Address: {station.Adress}, {station.Kaupunki}
+				</Typography>
+				<p>
+					Station coordinates (lat,lng): {station.y},{station.x}
+				</p>
+			</div>
+
+			<p>
+				Total number of journeys starting from the station:{" "}
+				{departuresFromStation}
+			</p>
+			<p>Total number of journeys ending at the station: {returnsAtStation}</p>
+
+			<GoogleMap station={station} />
+		</Container>
 	);
 };
 
