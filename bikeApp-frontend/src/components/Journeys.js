@@ -164,8 +164,8 @@ const Journeys = () => {
 	};
 
 	return (
-		<div>
-			<Typography align='center' variant='h2'>
+		<Container>
+			<Typography align='center' variant='h2' sx={{ pt: "7rem" }}>
 				Journeys
 			</Typography>
 
@@ -222,7 +222,7 @@ const Journeys = () => {
 					/>
 				</div>
 			</Container>
-		</div>
+		</Container>
 	);
 };
 
