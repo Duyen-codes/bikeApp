@@ -4,6 +4,8 @@ import { useLocation, useParams } from "react-router-dom";
 import { Container, Stack, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import GoogleMap from "./GoogleMap";
+import { Fade } from "react-awesome-reveal";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const StationDetails = (props) => {
 	const { state } = useLocation();
@@ -24,10 +26,10 @@ const StationDetails = (props) => {
 		try {
 			const res = await fetch(`/api/stations/${stationId}`);
 			const { departuresFromStation, returnsAtStation } = await res.json();
-			console.log(departuresFromStation);
+
 			setDeparturesFromStation(departuresFromStation);
 			setReturnsAtStation(returnsAtStation);
-			console.log(returnsAtStation);
+
 			setCenter({ lat: station.x, lng: station.y });
 			setLoading(false);
 		} catch (error) {
@@ -39,29 +41,41 @@ const StationDetails = (props) => {
 	}, [stationId]);
 
 	if (loading) {
-		return <Box sx={{ pt: "7rem" }}>loading...</Box>;
+		return (
+			<Box
+				sx={{ display: "flex", paddingTop: "7rem", justifyContent: "center" }}
+			>
+				<CircularProgress />
+			</Box>
+		);
 	}
 
 	return (
-		<Container sx={{ width: "100vw", paddingTop: "7rem" }}>
-			<div style={{ textAlign: "center" }}>
-				<Typography variant='h2'>{station.Name}</Typography>
+		<Fade>
+			<Container
+				sx={{
+					paddingTop: "7rem",
+					textAlign: "center",
+				}}
+			>
+				<Typography variant='h2' fontWeight='bold'>
+					{station.Name}
+				</Typography>
 				<Typography sx={{ fontWeight: "bold" }}>
 					Address: {station.Adress}, {station.Kaupunki}
 				</Typography>
+
 				<p>
-					Station coordinates (lat,lng): {station.y},{station.x}
+					Total number of journeys starting from the station:{" "}
+					{departuresFromStation}
 				</p>
-			</div>
+				<p>
+					Total number of journeys ending at the station: {returnsAtStation}
+				</p>
 
-			<p>
-				Total number of journeys starting from the station:{" "}
-				{departuresFromStation}
-			</p>
-			<p>Total number of journeys ending at the station: {returnsAtStation}</p>
-
-			<GoogleMap station={station} />
-		</Container>
+				<GoogleMap station={station} />
+			</Container>
+		</Fade>
 	);
 };
 

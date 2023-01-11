@@ -29,7 +29,6 @@ const GoogleMap = ({ station }) => {
 						zoom={zoom}
 						style={{
 							height: "450px",
-							minWidth: "700px",
 						}}
 					>
 						<Marker position={center} />
