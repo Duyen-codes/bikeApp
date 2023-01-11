@@ -132,7 +132,7 @@ const Stations = () => {
 	};
 
 	return (
-		<div>
+		<Container sx={{ pt: "7rem" }}>
 			<Typography align='center' variant='h2'>
 				Stations
 			</Typography>
@@ -178,7 +178,7 @@ const Stations = () => {
 					/>
 				</div>
 			</Container>
-		</div>
+		</Container>
 	);
 };
 

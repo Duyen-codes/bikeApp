@@ -7,8 +7,6 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 
-import helsinkicitybikestation from "../assets/helsinkicitybikestation.jpeg";
-import bikes1 from "../assets/bikes1.jpeg";
 import Helsinkibikes from "../assets/Helsinki-bikes.jpg";
 
 import { Slide } from "react-awesome-reveal";
