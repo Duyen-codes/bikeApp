@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.7d958033.css",
+    "main.js": "/static/js/main.e0449519.js",
+    "static/media/Helsinki-bikes.jpg": "/static/media/Helsinki-bikes.e9837e02cbc8eea41533.jpg",
+    "index.html": "/index.html",
+    "main.7d958033.css.map": "/static/css/main.7d958033.css.map",
+    "main.e0449519.js.map": "/static/js/main.e0449519.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7d958033.css",
+    "static/js/main.e0449519.js"
+  ]
+}

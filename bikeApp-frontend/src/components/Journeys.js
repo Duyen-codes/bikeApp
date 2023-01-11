@@ -23,6 +23,8 @@ import AddIcon from "@mui/icons-material/Add";
 import { Container } from "@mui/system";
 import JourneyFormDialog from "./JourneyFormDialog";
 
+import journeyService from "../services/journeys";
+
 const Journeys = () => {
 	const [journeys, setJourneys] = useState([]);
 	const [loading, setLoading] = useState(false);
@@ -54,11 +56,12 @@ const Journeys = () => {
 		setLoading(true);
 		try {
 			setLoading(true);
-			const res = await fetch(`/api/journeys?page=${page}&limit=${pageSize}`);
-			console.log("pageSize", pageSize);
 
-			const { data, pages, documentCount } = await res.json();
-			console.log("data", data);
+			const { data, pages, documentCount } = await journeyService.fetchJourneys(
+				page,
+				pageSize,
+			);
+
 			setPages(pages);
 			setJourneys(data);
 

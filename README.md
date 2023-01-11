@@ -1,5 +1,11 @@
 # bikeApp
 
+## What to do
+
+- homepage UI, stationDetails UI
+- refactor frontend codes
+- write e2e tests
+
 ## Installation
 
 - clone the repo
