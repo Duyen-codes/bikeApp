@@ -24,13 +24,13 @@ import { IconButton, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
+import stationService from "../services/stations";
 
 const Stations = () => {
 	const [stations, setStations] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [notification, setNotification] = useState(false);
 	const [page, setPage] = useState(1);
-	const [pages, setPages] = useState(1);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [pageSize, setPageSize] = useState(50);
 
@@ -38,14 +38,11 @@ const Stations = () => {
 
 	const navigate = useNavigate();
 	useEffect(() => {
-		const fetchStations = async () => {
+		const fetchAllStations = async () => {
 			setLoading(true);
 			try {
-				const res = await fetch(`/api/stations`);
+				const { data } = await stationService.fetchAllStations();
 
-				const { data, pages: totalPages } = await res.json();
-
-				setPages(totalPages);
 				setStations(data);
 				setLoading(false);
 			} catch (error) {
@@ -55,7 +52,7 @@ const Stations = () => {
 			}
 		};
 
-		fetchStations();
+		fetchAllStations();
 	}, [page, search]);
 
 	const columns: GridColDef[] = [
