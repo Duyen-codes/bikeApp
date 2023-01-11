@@ -40,19 +40,16 @@ const Journeys = () => {
 	const [open, setOpen] = useState(false);
 
 	const handleClickOpen = () => {
-		console.log("open click");
 		setOpen(true);
 	};
 
 	const handleClose = () => {
-		console.log("close click");
 		setOpen(false);
 	};
 
 	const navigate = useNavigate();
 
 	const fetchJourneys = async () => {
-		console.log("fetching journeys...");
 		setLoading(true);
 		try {
 			setLoading(true);
@@ -76,16 +73,14 @@ const Journeys = () => {
 	const getJourneysBySearch = async (searchQuery) => {
 		setLoading(true);
 
-		console.log("searchQuery", searchQuery);
-		console.log("searchQuery.search", searchQuery.search);
 		try {
 			setLoading(true);
-			const res = await fetch(
-				`/api/journeys/search?search=${searchQuery.search || "none"}`,
-			);
-			const { data, documentCount } = await res.json();
-			setJourneys(data);
 
+			const { data, documentCount } = await journeyService.getJourneysBySearch(
+				searchQuery,
+			);
+
+			setJourneys(data);
 			setRowCount(documentCount);
 			setLoading(false);
 		} catch (error) {
@@ -157,7 +152,7 @@ const Journeys = () => {
 
 	const searchJourney = (e) => {
 		e.preventDefault();
-		console.log("form submitted");
+
 		if (search.trim()) {
 			console.log("search", search);
 			getJourneysBySearch({ search });

@@ -8,4 +8,11 @@ const fetchJourneys = (page, pageSize) => {
 	});
 };
 
-export default { fetchJourneys };
+const getJourneysBySearch = async (searchQuery) => {
+	const response = await axios.get(
+		`${baseUrl}/search?search=${searchQuery.search}`,
+	);
+
+	return response.data;
+};
+export default { fetchJourneys, getJourneysBySearch };
