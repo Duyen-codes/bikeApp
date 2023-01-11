@@ -19,7 +19,7 @@ import { NavLink } from "react-router-dom";
 import Link from "@mui/material/Link";
 
 const drawerWidth = 240;
-const navItems = ["stations", "journeys"];
+const navItems = ["Stations", "Journeys"];
 
 function DrawerAppBar(props) {
 	const { window } = props;
@@ -34,25 +34,38 @@ function DrawerAppBar(props) {
 			onClick={handleDrawerToggle}
 			sx={{ textAlign: "center", backgroundColor: "primary" }}
 		>
-			<Link href='/' sx={{ my: 2, textDecoration: "none" }} variant='h5'>
-				<DirectionsBikeIcon fontSize='large' /> CityBike
+			<Link
+				href='/'
+				sx={[
+					{
+						"&:hover": { textDecoration: "underline" },
+						my: 2,
+						textDecoration: "none",
+					},
+				]}
+				variant='h5'
+			>
+				<DirectionsBikeIcon fontSize='large' /> Helsinki city bikes
 			</Link>
 			<Divider />
 			<List>
 				{navItems.map((item) => (
 					<ListItem key={item} disablePadding>
 						<ListItemButton sx={{ textAlign: "center" }}>
-							<NavLink
-								to={`/${item}`}
+							<Link
+								href={`/${item}`}
 								key={item}
-								style={{
-									textDecoration: "none",
-									color: "#1976d2",
-									fontSize: "18px",
-								}}
+								sx={[
+									{
+										"&:hover": { textDecoration: "underline" },
+										textDecoration: "none",
+										color: "#1976d2",
+										fontSize: "18px",
+									},
+								]}
 							>
 								{item}
-							</NavLink>
+							</Link>
 						</ListItemButton>
 					</ListItem>
 				))}
@@ -81,20 +94,24 @@ function DrawerAppBar(props) {
 						href='/'
 						color='inherit'
 						variant='h5'
-						sx={{
-							flexGrow: 1,
-							textDecoration: "none",
-							display: { xs: "none", sm: "block" },
-						}}
+						sx={[
+							{
+								"&:hover": { textDecoration: "underline" },
+								flexGrow: 1,
+								textDecoration: "none",
+								display: { xs: "none", sm: "block" },
+							},
+						]}
 					>
-						<DirectionsBikeIcon fontSize='large' /> CityBike
+						<DirectionsBikeIcon fontSize='large' /> Helsinki city bikes
 					</Link>
 					<Box sx={{ display: { xs: "none", sm: "block" } }}>
 						{navItems.map((item) => (
-							<NavLink
-								to={`/${item}`}
+							<Link
+								href={`/${item}`}
 								key={item}
-								style={{
+								sx={{
+									"&:hover": { textDecoration: "underline" },
 									color: "white",
 									textDecoration: "none",
 									paddingLeft: "2rem",
@@ -102,7 +119,7 @@ function DrawerAppBar(props) {
 								}}
 							>
 								{item}
-							</NavLink>
+							</Link>
 						))}
 					</Box>
 				</Toolbar>
@@ -126,9 +143,6 @@ function DrawerAppBar(props) {
 				>
 					{drawer}
 				</Drawer>
-			</Box>
-			<Box component='main' sx={{ p: 3 }}>
-				<Toolbar />
 			</Box>
 		</Box>
 	);
