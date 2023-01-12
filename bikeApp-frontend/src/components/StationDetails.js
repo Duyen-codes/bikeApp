@@ -22,6 +22,9 @@ const StationDetails = (props) => {
 
 	const [returnAvgDistance, setReturnAvgDistance] = useState();
 
+	const [top5ReturnStations, setTop5ReturnStations] = useState();
+	const [top5DepartureStations, setTop5DepartureStations] = useState();
+
 	const [center, setCenter] = React.useState({
 		lat: 0,
 		lng: 0,
@@ -34,6 +37,8 @@ const StationDetails = (props) => {
 				returnsAtStationCount,
 				departureAvgDistance,
 				returnAvgDistance,
+				top5ReturnStations,
+				top5DepartureStations,
 			} = await res.json();
 
 			setDeparturesFromStationCount(departuresFromStationCount);
@@ -41,6 +46,9 @@ const StationDetails = (props) => {
 
 			setDepartureAvgDistance(departureAvgDistance);
 			setReturnAvgDistance(returnAvgDistance);
+
+			setTop5ReturnStations(top5ReturnStations);
+			setTop5DepartureStations(top5DepartureStations);
 			setCenter({ lat: station.x, lng: station.y });
 			setLoading(false);
 		} catch (error) {
@@ -92,6 +100,28 @@ const StationDetails = (props) => {
 					The average distance of a journey ending at the station:
 					{returnAvgDistance}m
 				</p>
+				<div>
+					Top 5 most popular return stations for journeys starting from the
+					station:
+					{top5ReturnStations.map((station) => (
+						<li key={station._id}>
+							{station._id}
+							<p>Returns: {station.count}</p>
+						</li>
+					))}
+				</div>
+
+				<div>
+					Top 5 most popular departure stations for journeys returning at the
+					station:
+					{top5DepartureStations.map((station) => (
+						<li key={station._id}>
+							{station._id}
+							<p>Departures: {station.count}</p>
+						</li>
+					))}
+				</div>
+
 				<GoogleMap station={station} />
 			</Container>
 		</Fade>
