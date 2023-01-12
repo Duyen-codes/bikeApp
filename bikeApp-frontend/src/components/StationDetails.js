@@ -15,8 +15,12 @@ const StationDetails = (props) => {
 		state.find((item) => item.id === stationId),
 	);
 	const [loading, setLoading] = useState(true);
-	const [departuresFromStation, setDeparturesFromStation] = useState();
-	const [returnsAtStation, setReturnsAtStation] = useState();
+	const [departuresFromStationCount, setDeparturesFromStationCount] =
+		useState();
+	const [returnsAtStationCount, setReturnsAtStationCount] = useState();
+	const [departureAvgDistance, setDepartureAvgDistance] = useState();
+
+	const [returnAvgDistance, setReturnAvgDistance] = useState();
 
 	const [center, setCenter] = React.useState({
 		lat: 0,
@@ -25,11 +29,18 @@ const StationDetails = (props) => {
 	const fetchStationData = async () => {
 		try {
 			const res = await fetch(`/api/stations/${stationId}`);
-			const { departuresFromStation, returnsAtStation } = await res.json();
+			const {
+				departuresFromStationCount,
+				returnsAtStationCount,
+				departureAvgDistance,
+				returnAvgDistance,
+			} = await res.json();
 
-			setDeparturesFromStation(departuresFromStation);
-			setReturnsAtStation(returnsAtStation);
+			setDeparturesFromStationCount(departuresFromStationCount);
+			setReturnsAtStationCount(returnsAtStationCount);
 
+			setDepartureAvgDistance(departureAvgDistance);
+			setReturnAvgDistance(returnAvgDistance);
 			setCenter({ lat: station.x, lng: station.y });
 			setLoading(false);
 		} catch (error) {
@@ -67,12 +78,20 @@ const StationDetails = (props) => {
 
 				<p>
 					Total number of journeys starting from the station:{" "}
-					{departuresFromStation}
+					{departuresFromStationCount}
 				</p>
 				<p>
-					Total number of journeys ending at the station: {returnsAtStation}
+					Total number of journeys ending at the station:{" "}
+					{returnsAtStationCount}
 				</p>
-
+				<p>
+					The average distance of a journey starting from the station:
+					{departureAvgDistance}m
+				</p>
+				<p>
+					The average distance of a journey ending at the station:
+					{returnAvgDistance}m
+				</p>
 				<GoogleMap station={station} />
 			</Container>
 		</Fade>

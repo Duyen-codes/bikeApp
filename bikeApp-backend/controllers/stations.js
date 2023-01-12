@@ -58,6 +58,7 @@ router.get("/:id", async (req, res) => {
 		averageDistanceFromStation[0].averageDistanceFromStation,
 	);
 
+	// average distance of a journey returning at the station
 	const averageDistanceToStation = await Journey.aggregate([
 		{ $match: { Return_station_id: station.ID } },
 		{
@@ -73,8 +74,6 @@ router.get("/:id", async (req, res) => {
 	const returnAvgDistance = Math.round(
 		averageDistanceToStation[0].averageDistanceToStation,
 	);
-
-	// average distance of a journey returning at the station
 
 	res.json({
 		station,
