@@ -24,6 +24,8 @@ import { IconButton, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
+
 import stationService from "../services/stations";
 
 const Stations = () => {
@@ -141,10 +143,10 @@ const Stations = () => {
 					>
 						<Box sx={{ display: "flex", alignItems: "flex-end" }}>
 							<SearchIcon sx={{ mr: 1, my: 0.5 }} />
-
 							<TextField
 								id='standard-basic'
 								label='Search'
+								type='search'
 								value={search}
 								onChange={({ target }) => setSearch(target.value)}
 								variant='standard'
@@ -172,6 +174,11 @@ const Stations = () => {
 						}}
 						disableSelectionOnClick
 						onRowClick={handleRowClick}
+						sx={{
+							"&.MuiDataGrid-row:hover": {
+								cursor: "pointer",
+							},
+						}}
 					/>
 				</div>
 			</Container>
