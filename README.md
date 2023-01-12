@@ -1,10 +1,8 @@
 # bikeApp
 
-## What to do
+## Project Description
 
-- homepage UI, stationDetails UI
-- refactor frontend codes
-- write e2e tests
+## Built with
 
 ## Installation
 
@@ -20,3 +18,5 @@
   ```shell
   npm start
   ```
+
+## TODO
