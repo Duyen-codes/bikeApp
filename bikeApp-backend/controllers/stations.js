@@ -75,12 +75,52 @@ router.get("/:id", async (req, res) => {
 		averageDistanceToStation[0].averageDistanceToStation,
 	);
 
+	// Top 5 most popular return stations for journeys starting from the station
+
+	const top5ReturnStations = await Journey.aggregate([
+		{ $match: { Departure_station_id: station.ID } },
+		{
+			$group: {
+				_id: "$Return_station_name",
+				count: {
+					$count: {},
+				},
+			},
+		},
+		{
+			$sort: { count: -1 },
+		},
+		{
+			$limit: 5,
+		},
+	]);
+
+	const top5DepartureStations = await Journey.aggregate([
+		{ $match: { Return_station_id: station.ID } },
+		{
+			$group: {
+				_id: "$Departure_station_name",
+				count: {
+					$count: {},
+				},
+			},
+		},
+		{
+			$sort: { count: -1 },
+		},
+		{
+			$limit: 5,
+		},
+	]);
+
 	res.json({
 		station,
 		departuresFromStationCount,
 		returnsAtStationCount,
 		departureAvgDistance,
 		returnAvgDistance,
+		top5ReturnStations,
+		top5DepartureStations,
 	});
 });
 
