@@ -86,7 +86,15 @@ const Stations = () => {
 		},
 	];
 
-	const rows = stations.map((station) => {
+	const filteredStations = stations.filter(
+		(station) =>
+			station.Name.toLowerCase() === search.toLowerCase() ||
+			station.Adress.toLowerCase() === search.toLowerCase(),
+	);
+
+	const stationsToShow = search ? filteredStations : stations;
+
+	const rows = stationsToShow.map((station) => {
 		return {
 			id: station.id,
 			name: station.Name,
@@ -118,18 +126,6 @@ const Stations = () => {
 		});
 	};
 
-	const searchStation = (e) => {
-		e.preventDefault();
-
-		const searchResult = stations.filter(
-			(station) =>
-				station.Name.toLowerCase() === search.toLowerCase() ||
-				station.Adress.toLowerCase() === search.toLowerCase(),
-		);
-
-		setStations(searchResult);
-	};
-
 	return (
 		<Container sx={{ pt: "7rem" }}>
 			<Typography align='center' variant='h2'>
@@ -137,23 +133,18 @@ const Stations = () => {
 			</Typography>
 			<Container>
 				<div>
-					<form
-						onSubmit={searchStation}
-						sx={{ display: "flex", alignItems: "flex-end" }}
-					>
-						<Box sx={{ display: "flex", alignItems: "flex-end" }}>
-							<SearchIcon sx={{ mr: 1, my: 0.5 }} />
-							<TextField
-								id='standard-basic'
-								label='Search'
-								type='search'
-								value={search}
-								onChange={({ target }) => setSearch(target.value)}
-								variant='standard'
-								size='small'
-							/>
-						</Box>
-					</form>
+					<Box sx={{ display: "flex", alignItems: "flex-end" }}>
+						<SearchIcon sx={{ mr: 1, my: 0.5 }} />
+						<TextField
+							id='standard-basic'
+							label='Search'
+							type='search'
+							value={search}
+							onChange={({ target }) => setSearch(target.value)}
+							variant='standard'
+							size='small'
+						/>
+					</Box>
 				</div>
 				<div style={{ height: 500, width: "100%" }}>
 					<DataGrid
