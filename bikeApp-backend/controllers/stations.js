@@ -26,17 +26,63 @@ router.get("/:id", async (req, res) => {
 	const station = await Station.findById(id);
 	console.log("station", station);
 
-	const departuresFromStation = await Journey.countDocuments({
+	const departuresFromStationCount = await Journey.countDocuments({
 		Departure_station_id: station.ID,
 	});
 
-	const returnsAtStation = await Journey.countDocuments({
+	const returnsAtStationCount = await Journey.countDocuments({
 		Return_station_id: station.ID,
 	});
-	console.log(departuresFromStation);
-	console.log(returnsAtStation);
+	console.log(departuresFromStationCount);
+	console.log(returnsAtStationCount);
 
-	res.json({ station, departuresFromStation, returnsAtStation });
+	// calculate average distance of a journey starting from the station
+
+	const averageDistanceFromStation = await Journey.aggregate([
+		{
+			$match: {
+				Departure_station_id: station.ID,
+			},
+		},
+		{
+			$group: {
+				_id: null,
+				averageDistanceFromStation: {
+					$avg: "$Covered_distance",
+				},
+			},
+		},
+	]);
+
+	const departureAvgDistance = Math.round(
+		averageDistanceFromStation[0].averageDistanceFromStation,
+	);
+
+	const averageDistanceToStation = await Journey.aggregate([
+		{ $match: { Return_station_id: station.ID } },
+		{
+			$group: {
+				_id: null,
+				averageDistanceToStation: {
+					$avg: "$Covered_distance",
+				},
+			},
+		},
+	]);
+
+	const returnAvgDistance = Math.round(
+		averageDistanceToStation[0].averageDistanceToStation,
+	);
+
+	// average distance of a journey returning at the station
+
+	res.json({
+		station,
+		departuresFromStationCount,
+		returnsAtStationCount,
+		departureAvgDistance,
+		returnAvgDistance,
+	});
 });
 
 router.post("/", (req, res) => {
