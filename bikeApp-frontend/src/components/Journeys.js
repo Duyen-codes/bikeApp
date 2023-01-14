@@ -67,15 +67,11 @@ const Journeys = () => {
 	};
 
 	const getJourneysBySearch = async (searchQuery) => {
-		setLoading(true);
-
 		try {
 			setLoading(true);
-
 			const { data, documentCount } = await journeyService.getJourneysBySearch(
 				searchQuery,
 			);
-
 			setJourneys(data);
 			setRowCount(documentCount);
 			setLoading(false);
