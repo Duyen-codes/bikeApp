@@ -92,8 +92,8 @@ const Journeys = () => {
 	let rows = journeys.map((journey) => {
 		return {
 			id: journey.id,
-			departureTime: journey.Departure,
-			returnTime: journey.Return,
+			departureTime: new Date(journey.Departure).toLocaleString(),
+			returnTime: new Date(journey.Return).toLocaleString(),
 			departureStation: journey.Departure_station_name,
 			returnStation: journey.Return_station_name,
 			coveredDistance: journey.Covered_distance / 1000,
