@@ -100,7 +100,7 @@ const StationDetails = (props) => {
 				<Grid
 					container
 					spacing={{ xs: 2, md: 3 }}
-					sx={{ borderColor: "#e0e0e0", pt: "3rem", mb: "3rem" }}
+					sx={{ borderColor: "#e0e0e0", pt: "2rem", mb: "2rem" }}
 				>
 					<Grid item xs={12} sm={6} md={4} sx={{ borderColor: "#e0e0e0" }}>
 						<Card sx={{ height: "100%" }}>
