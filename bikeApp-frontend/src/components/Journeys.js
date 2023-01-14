@@ -27,7 +27,7 @@ import journeyService from "../services/journeys";
 
 const Journeys = () => {
 	const [journeys, setJourneys] = useState([]);
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 	const [notification, setNotification] = useState(false);
 	const [page, setPage] = useState(0);
 	const [pages, setPages] = useState(1);
@@ -50,18 +50,14 @@ const Journeys = () => {
 	const navigate = useNavigate();
 
 	const fetchJourneys = async () => {
-		setLoading(true);
 		try {
 			setLoading(true);
-
 			const { data, pages, documentCount } = await journeyService.fetchJourneys(
 				page,
 				pageSize,
 			);
-
 			setPages(pages);
 			setJourneys(data);
-
 			setRowCount(documentCount);
 			setLoading(false);
 		} catch (error) {
@@ -139,10 +135,10 @@ const Journeys = () => {
 		fetchJourneys();
 	}, [page, search, pageSize]);
 
-	// const handleChangeRowsPerPage = (event) => {
-	// 	setRowsPerPage(parseInt(event.target.value, 10));
-	// 	setPage(0);
-	// };
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setPage(0);
+	};
 
 	const handleChangePage = (newPage) => {
 		console.log("handleChangePage");
