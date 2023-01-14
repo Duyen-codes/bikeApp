@@ -28,15 +28,13 @@ import journeyService from "../services/journeys";
 const Journeys = () => {
 	const [journeys, setJourneys] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const [notification, setNotification] = useState(false);
+
 	const [page, setPage] = useState(0);
 	const [pages, setPages] = useState(1);
 	const [pageSize, setPageSize] = useState(50);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [rowCount, setRowCount] = useState(0);
-
 	const [search, setSearch] = useState("");
-
 	const [open, setOpen] = useState(false);
 
 	const handleClickOpen = () => {
@@ -62,7 +60,6 @@ const Journeys = () => {
 			setLoading(false);
 		} catch (error) {
 			setLoading(false);
-			setNotification("Some error occurred");
 		}
 	};
 
@@ -77,7 +74,6 @@ const Journeys = () => {
 			setLoading(false);
 		} catch (error) {
 			setLoading(false);
-			setNotification("Some error occurred");
 		}
 	};
 
