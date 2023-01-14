@@ -25,8 +25,8 @@ router.get("/", async (req, res) => {
 			status: "success",
 			page,
 			pages,
-			data: result,
 			documentCount: total,
+			data: result,
 		});
 	} catch (error) {
 		console.log(error);
