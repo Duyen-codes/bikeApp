@@ -19,7 +19,7 @@ import { NavLink } from "react-router-dom";
 import Link from "@mui/material/Link";
 
 const drawerWidth = 240;
-const navItems = ["Stations", "Journeys"];
+const navItems = ["stations", "journeys"];
 
 function DrawerAppBar(props) {
 	const { window } = props;
