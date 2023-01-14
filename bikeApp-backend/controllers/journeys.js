@@ -21,11 +21,8 @@ router.get("/", async (req, res) => {
 
 		let result = await query;
 
-		console.log("result.length", result.length);
-
 		return res.status(200).json({
 			status: "success",
-			count: result.length,
 			page,
 			pages,
 			data: result,
