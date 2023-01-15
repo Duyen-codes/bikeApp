@@ -3,228 +3,167 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
 
-import {
-	DataGrid,
-	GridColDef,
-	GridRowsProps,
-	GridToolbarContainer,
-	GridToolbarColumnsButton,
-	GridToolbarFilterButton,
-	GridToolbarExport,
-	GridToolbarDensitySelector,
-} from "@mui/x-data-grid";
-import LinearProgress from "@mui/material/LinearProgress";
-import { TextField } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import { Typography } from "@mui/material";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
+import { styled } from "@mui/material/styles";
 import { Container } from "@mui/system";
-import JourneyFormDialog from "./JourneyFormDialog";
+
+import { Typography } from "@mui/material";
+import {
+	TextField,
+	InputAdornment,
+	IconButton,
+	Button,
+	Snackbar,
+	Table,
+	TableCellClasses,
+	TableHead,
+	TableRow,
+	TableBody,
+	TableContainer,
+	Paper,
+	TablePagination,
+} from "@mui/material";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 
 import journeyService from "../services/journeys";
 
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+	[`&.${tableCellClasses.head}`]: {
+		backgroundColor: theme.palette.primary.main,
+		color: theme.palette.common.white,
+	},
+	[`&.${tableCellClasses.body}`]: {
+		fontSize: 14,
+	},
+}));
+
 const Journeys = () => {
+	// read journeys
 	const [journeys, setJourneys] = useState([]);
+	const [count, setCount] = useState(0);
 	const [loading, setLoading] = useState(true);
 
+	// pagination
 	const [page, setPage] = useState(0);
-	const [pages, setPages] = useState(1);
-	const [pageSize, setPageSize] = useState(50);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
+	const [rowsPerPage, setRowsPerPage] = useState(5);
 	const [rowCount, setRowCount] = useState(0);
-	const [search, setSearch] = useState("");
-	const [open, setOpen] = useState(false);
-
-	const handleClickOpen = () => {
-		setOpen(true);
-	};
-
-	const handleClose = () => {
-		setOpen(false);
-	};
-
-	const navigate = useNavigate();
 
 	const fetchJourneys = async () => {
+		console.log("fetchJourneys...");
 		try {
 			setLoading(true);
-			const { data, pages, documentCount } = await journeyService.fetchJourneys(
-				page,
-				pageSize,
-			);
-			setPages(pages);
-			setJourneys(data);
-			setRowCount(documentCount);
+			console.log("page", page);
+			const { journeys, count } = await journeyService.fetchJourneys({
+				page: page + 1,
+				pageSize: rowsPerPage,
+			});
+
+			setJourneys(journeys);
+			setCount(count);
+			setRowCount(count);
+
 			setLoading(false);
 		} catch (error) {
 			setLoading(false);
 		}
 	};
-
-	const getJourneysBySearch = async (searchQuery) => {
-		try {
-			setLoading(true);
-			const { data, documentCount } = await journeyService.getJourneysBySearch(
-				searchQuery,
-			);
-			setJourneys(data);
-			setRowCount(documentCount);
-			setLoading(false);
-		} catch (error) {
-			setLoading(false);
-		}
-	};
-
-	let rows = journeys.map((journey) => {
-		return {
-			id: journey.id,
-			departureTime: new Date(journey.Departure).toLocaleString(),
-			returnTime: new Date(journey.Return).toLocaleString(),
-			departureStation: journey.Departure_station_name,
-			returnStation: journey.Return_station_name,
-			coveredDistance: journey.Covered_distance / 1000,
-			duration: Math.floor(journey.Duration / 60),
-		};
-	});
-
-	const columns: GridColDef[] = [
-		{
-			field: "departureTime",
-			headerName: "Departure Time",
-			width: 200,
-		},
-		{
-			field: "returnTime",
-			headerName: "Return Time",
-			width: 200,
-		},
-		{
-			field: "departureStation",
-			headerName: "Departure station",
-			width: 180,
-		},
-		{
-			field: "returnStation",
-			headerName: "Return station",
-			width: 180,
-		},
-		{
-			field: "coveredDistance",
-			headerName: "Covered distance (km)",
-			width: 180,
-			type: "number",
-		},
-		{
-			field: "duration",
-			headerName: "Duration (min)",
-			width: 180,
-		},
-	];
 
 	useEffect(() => {
 		fetchJourneys();
-	}, [page, search, pageSize]);
+	}, [page, rowsPerPage]);
+
+	const handleChangePage = (e, newPage) => {
+		console.log("newPage", newPage);
+		setPage(newPage);
+	};
 
 	const handleChangeRowsPerPage = (event) => {
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setPage(0);
 	};
 
-	const handleChangePage = (newPage) => {
-		console.log("handleChangePage");
-		console.log("newPage", newPage);
-		setPage(newPage);
-	};
-
-	const searchJourney = (e) => {
-		e.preventDefault();
-
-		if (search.trim()) {
-			console.log("search", search);
-			getJourneysBySearch({ search });
-		} else {
-			navigate("/");
-		}
-	};
-
 	return (
-		<Container>
-			<Typography align='center' variant='h2' sx={{ pt: "7rem" }}>
+		<Container sx={{ pt: "7rem" }}>
+			<Typography align='center' variant='h2'>
 				Journeys
 			</Typography>
-
-			<JourneyFormDialog
-				open={open}
-				setOpen={setOpen}
-				handleClose={handleClose}
-			/>
-
-			<Container>
-				<div>
-					<form
-						onSubmit={searchJourney}
-						sx={{ display: "flex", alignItems: "flex-end" }}
-					>
-						<Box sx={{ display: "flex", alignItems: "flex-end" }}>
-							<SearchIcon sx={{ mr: 1, my: 0.5 }} />
-
-							<TextField
-								id='standard-basic'
-								label='Search'
-								value={search}
-								onChange={({ target }) => setSearch(target.value)}
-								variant='standard'
-								size='small'
-							/>
-						</Box>
-					</form>
-				</div>
-				<div style={{ height: 500, width: "100%" }}>
-					<DataGrid
-						loading={loading}
-						rows={rows}
+			{count ? (
+				<Container>
+					<TableContainer sx={{ maxHeight: 650 }}>
+						<Table stickyHeader>
+							<TableHead>
+								<TableRow>
+									<StyledTableCell>
+										<b>Index</b>
+									</StyledTableCell>
+									<StyledTableCell>
+										<b>Departure time</b>
+									</StyledTableCell>
+									<StyledTableCell>
+										<b>Return time</b>
+									</StyledTableCell>
+									<StyledTableCell>
+										<b>Departure station</b>
+									</StyledTableCell>
+									<StyledTableCell>
+										<b>Return station</b>
+									</StyledTableCell>
+									<StyledTableCell>
+										<b>Covered distance (km)</b>
+									</StyledTableCell>
+									<StyledTableCell>
+										<b>Duration (m)</b>
+									</StyledTableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{journeys?.map(
+									(
+										{
+											id,
+											Departure,
+											Return,
+											Departure_station_name,
+											Return_station_name,
+											Covered_distance,
+											Duration,
+										},
+										index,
+									) => (
+										<TableRow key={id} hover>
+											<TableCell>{index + 1}</TableCell>
+											<TableCell>
+												{new Date(Departure).toLocaleString()}
+											</TableCell>
+											<TableCell>{new Date(Return).toLocaleString()}</TableCell>
+											<TableCell>{Departure_station_name}</TableCell>
+											<TableCell>{Return_station_name}</TableCell>
+											<TableCell>
+												{(Covered_distance / 1000).toFixed(2)}
+											</TableCell>
+											<TableCell>{Math.floor(Duration / 60)}</TableCell>
+										</TableRow>
+									),
+								)}
+							</TableBody>
+						</Table>
+					</TableContainer>
+					<TablePagination
+						component='div'
+						count={count}
 						page={page}
+						rowsPerPage={rowsPerPage}
+						rowsPerPageOptions={[5, 10, 25, 50, 100]}
 						onPageChange={handleChangePage}
-						rowCount={rowCount}
-						columns={columns}
-						pageSize={pageSize}
-						onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-						rowsPerPageOptions={[10, 25, 50, 100]}
-						components={{
-							Toolbar: () => (
-								<CustomToolbar
-									search={search}
-									setSearch={setSearch}
-									searchJourney={searchJourney}
-									handleClickOpen={handleClickOpen}
-									handleClose={handleClose}
-								/>
-							),
-							LoadingOverlay: LinearProgress,
-						}}
-						disableSelectionOnClick
+						onRowsPerPageChange={handleChangeRowsPerPage}
 					/>
-				</div>
-			</Container>
+				</Container>
+			) : (
+				<h4 className='text-center alert alert-primary p-4'>
+					No journeys to display
+				</h4>
+			)}
 		</Container>
 	);
 };
 
 export default Journeys;
-
-function CustomToolbar({ handleClickOpen }) {
-	return (
-		<GridToolbarContainer>
-			<GridToolbarColumnsButton />
-			<GridToolbarFilterButton />
-			<GridToolbarDensitySelector />
-			<GridToolbarExport />
-
-			<Button variant='text' startIcon={<AddIcon />} onClick={handleClickOpen}>
-				Add Journey
-			</Button>
-		</GridToolbarContainer>
-	);
-}

@@ -5,28 +5,26 @@ const Station = require("../models/station");
 
 // fetch journeys from db
 router.get("/", async (req, res) => {
+	const page = parseInt(req.query.page) || 1;
+	const pageSize = parseInt(req.query.pageSize) || 50;
 	try {
-		let query = Journey.find();
-		const page = parseInt(req.query.page);
+		const count = await Journey.countDocuments({});
+
+		console.log("count: ", count);
 		console.log("req.query.page: ", req.query.page);
-		console.log("req.query.limit: ", req.query.limit);
-		const pageSize = parseInt(req.query.limit) || 50;
+		console.log("req.query.pageSize: ", req.query.pageSize);
+
 		console.log("pageSize", pageSize);
-		const skip = page * pageSize;
+		const skip = (page - 1) * pageSize;
 		console.log("skip", skip);
-		const total = await Journey.countDocuments();
-		const pages = Math.ceil(total / pageSize);
 
-		query = query.skip(skip).limit(pageSize);
-
-		let result = await query;
+		let journeys = await Journey.find({}).skip(skip).limit(pageSize);
 
 		return res.status(200).json({
 			status: "success",
 			page,
-			pages,
-			documentCount: total,
-			data: result,
+			journeys,
+			count,
 		});
 	} catch (error) {
 		console.log(error);
