@@ -120,11 +120,18 @@ router.get("/:id", async (req, res) => {
 	});
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
+	const existingStation = await Station.findOne({ ID });
+	if (existingStation) {
+		return res.status(400).json({
+			error: `station with ID ${ID} already exists in station collections`,
+		});
+	}
 	const station = new Station(req.body);
-	station.save().then((result) => {
-		res.status(201).json(result);
-	});
+
+	const savedStation = await station.save();
+
+	res.status(201).json(savedStation);
 });
 
 module.exports = router;
