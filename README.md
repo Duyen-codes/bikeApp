@@ -1,8 +1,27 @@
-# bikeApp
+# Solita Dev Academy pre-assignment
+
+Application for displaying data from journeys made with city bikes in the Helsinki Capital area.
 
 ## Project Description
 
 ## Built with
+
+### Frontend:
+
+- React
+- axios
+
+### Backend:
+
+- nodejs
+- express
+- mongodb
+- cors
+- dotenv
+- needle
+- fastcsv
+- csvtojson
+- node-fetch
 
 ## Installation
 
