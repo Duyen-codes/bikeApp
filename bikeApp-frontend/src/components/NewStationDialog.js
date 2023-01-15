@@ -26,7 +26,6 @@ const NewStationDialog = ({ open, handleClose, handleAddStation }) => {
 	const [y, setY] = useState(0);
 
 	const handleAdd = () => {
-		console.log("add new station");
 		const stationObject = {
 			FID: Number(FID),
 			ID: Number(ID),
