@@ -27,6 +27,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 
 import stationService from "../services/stations";
+import NewStationDialog from "./NewStationDialog";
 
 const Stations = () => {
 	const [stations, setStations] = useState([]);
@@ -39,6 +40,10 @@ const Stations = () => {
 	const [search, setSearch] = useState("");
 
 	const navigate = useNavigate();
+
+	// toggle dialog visibility
+	const [open, setOpen] = useState(false);
+
 	useEffect(() => {
 		const fetchAllStations = async () => {
 			try {
@@ -123,11 +128,26 @@ const Stations = () => {
 		});
 	};
 
+	// dialog visibility
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
+
 	return (
 		<Container sx={{ pt: "7rem" }}>
 			<Typography align='center' variant='h2'>
 				Stations
 			</Typography>
+			<NewStationDialog
+				open={open}
+				setOpen={setOpen}
+				handleClose={handleClose}
+			/>
+
 			<Container>
 				<div>
 					<Box sx={{ display: "flex", alignItems: "flex-end" }}>
@@ -156,7 +176,12 @@ const Stations = () => {
 						onPageChange={handleChangePage}
 						components={{
 							Toolbar: () => (
-								<CustomToolbar search={search} setSearch={setSearch} />
+								<CustomToolbar
+									search={search}
+									setSearch={setSearch}
+									handleClickOpen={handleClickOpen}
+									handleClose={handleClose}
+								/>
 							),
 							LoadingOverlay: LinearProgress,
 						}}
@@ -176,7 +201,7 @@ const Stations = () => {
 
 export default Stations;
 
-function CustomToolbar() {
+function CustomToolbar({ handleClickOpen }) {
 	return (
 		<GridToolbarContainer>
 			<GridToolbarColumnsButton />
@@ -184,7 +209,7 @@ function CustomToolbar() {
 			<GridToolbarDensitySelector />
 			<GridToolbarExport />
 
-			<Button variant='text' startIcon={<AddIcon />}>
+			<Button onClick={handleClickOpen} variant='text' startIcon={<AddIcon />}>
 				Add Station
 			</Button>
 		</GridToolbarContainer>
