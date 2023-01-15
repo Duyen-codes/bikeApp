@@ -12,7 +12,6 @@ router.get("/", async (req, res) => {
 			data: result,
 		});
 	} catch (error) {
-		console.log(error);
 		res.status(500).json({
 			status: "error",
 			message: "Server error",
@@ -22,9 +21,8 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
 	const id = req.params.id;
-	console.log("id", id);
+
 	const station = await Station.findById(id);
-	console.log("station", station);
 
 	const departuresFromStationCount = await Journey.countDocuments({
 		Departure_station_id: station.ID,
@@ -33,8 +31,6 @@ router.get("/:id", async (req, res) => {
 	const returnsAtStationCount = await Journey.countDocuments({
 		Return_station_id: station.ID,
 	});
-	console.log(departuresFromStationCount);
-	console.log(returnsAtStationCount);
 
 	// calculate average distance of a journey starting from the station
 
@@ -127,7 +123,6 @@ router.get("/:id", async (req, res) => {
 router.post("/", (req, res) => {
 	const station = new Station(req.body);
 	station.save().then((result) => {
-		console.log("result", result);
 		res.status(201).json(result);
 	});
 });
