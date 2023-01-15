@@ -55,6 +55,8 @@ const NewStationDialog = ({ open, handleClose, handleAddStation }) => {
 		setKapasiteet(0);
 		setX(0);
 		setY(0);
+
+		handleClose();
 	};
 	return (
 		<Dialog open={open} onClose={handleClose}>
