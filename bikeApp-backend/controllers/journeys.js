@@ -10,13 +10,7 @@ router.get("/", async (req, res) => {
 	try {
 		const count = await Journey.countDocuments({});
 
-		console.log("count: ", count);
-		console.log("req.query.page: ", req.query.page);
-		console.log("req.query.pageSize: ", req.query.pageSize);
-
-		console.log("pageSize", pageSize);
 		const skip = (page - 1) * pageSize;
-		console.log("skip", skip);
 
 		let journeys = await Journey.find({}).skip(skip).limit(pageSize);
 
@@ -34,8 +28,6 @@ router.get("/", async (req, res) => {
 router.get("/search", async (req, res) => {
 	const { search } = req.query;
 
-	console.log("search", search);
-
 	try {
 		const searchTerm = new RegExp(search, "i");
 
@@ -47,7 +39,6 @@ router.get("/search", async (req, res) => {
 		});
 		const documentCount = journeys.length;
 
-		console.log("journeys", journeys);
 		res.json({
 			documentCount,
 			data: journeys,
