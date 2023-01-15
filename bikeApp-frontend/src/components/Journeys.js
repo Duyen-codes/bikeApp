@@ -6,6 +6,10 @@ import { Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import { Container } from "@mui/system";
 
+import { DataGrid } from "@mui/x-data-grid";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
 import { Typography } from "@mui/material";
 import {
 	TextField,
@@ -50,8 +54,8 @@ const Journeys = () => {
 	const fetchJourneys = async () => {
 		console.log("fetchJourneys...");
 		try {
-			setLoading(true);
 			console.log("page", page);
+			console.log(typeof page);
 			const { journeys, count } = await journeyService.fetchJourneys({
 				page: page + 1,
 				pageSize: rowsPerPage,
@@ -69,9 +73,10 @@ const Journeys = () => {
 
 	useEffect(() => {
 		fetchJourneys();
+		console.log("page", page, "pageSize", rowsPerPage);
 	}, [page, rowsPerPage]);
 
-	const handleChangePage = (e, newPage) => {
+	const handleChangePage = (event, newPage) => {
 		console.log("newPage", newPage);
 		setPage(newPage);
 	};
@@ -81,11 +86,19 @@ const Journeys = () => {
 		setPage(0);
 	};
 
+	if (loading) {
+		return (
+			<Box sx={{ display: "flex", mt: "7rem", justifyContent: "center" }}>
+				<CircularProgress />
+			</Box>
+		);
+	}
 	return (
 		<Container sx={{ pt: "7rem" }}>
-			<Typography align='center' variant='h2'>
+			<Typography align='center' variant='h2' pb={3}>
 				Journeys
 			</Typography>
+
 			{count ? (
 				<Container>
 					<TableContainer sx={{ maxHeight: 650 }}>
@@ -129,7 +142,16 @@ const Journeys = () => {
 										},
 										index,
 									) => (
-										<TableRow key={id} hover>
+										<TableRow
+											key={id}
+											hover
+											sx={{
+												"&:last-child td, &:last-child th": { border: 0 },
+												"&.MuiDataGrid-row:hover": {
+													cursor: "none",
+												},
+											}}
+										>
 											<TableCell>{index + 1}</TableCell>
 											<TableCell>
 												{new Date(Departure).toLocaleString()}

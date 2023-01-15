@@ -30,7 +30,7 @@ import stationService from "../services/stations";
 
 const Stations = () => {
 	const [stations, setStations] = useState([]);
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 	const [notification, setNotification] = useState(false);
 	const [page, setPage] = useState(1);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -41,7 +41,6 @@ const Stations = () => {
 	const navigate = useNavigate();
 	useEffect(() => {
 		const fetchAllStations = async () => {
-			setLoading(true);
 			try {
 				const { data } = await stationService.fetchAllStations();
 
