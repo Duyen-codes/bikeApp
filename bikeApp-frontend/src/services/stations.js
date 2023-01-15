@@ -8,4 +8,11 @@ const fetchAllStations = () => {
 	});
 };
 
-export default { fetchAllStations };
+const create = (newObject) => {
+	const request = axios.post(baseUrl, newObject);
+	return request.then((response) => {
+		console.log("response", response);
+		return response.data;
+	});
+};
+export default { fetchAllStations, create };
