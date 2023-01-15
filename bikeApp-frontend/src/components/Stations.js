@@ -137,6 +137,12 @@ const Stations = () => {
 		setOpen(false);
 	};
 
+	const handleAddStation = (stationObject) => {
+		// stationService.create(stationObject).then((response) => {
+		// 	setStations(stations.concat(response.data));
+		// });
+	};
+
 	return (
 		<Container sx={{ pt: "7rem" }}>
 			<Typography align='center' variant='h2'>
@@ -146,6 +152,7 @@ const Stations = () => {
 				open={open}
 				setOpen={setOpen}
 				handleClose={handleClose}
+				handleAddStation={handleAddStation}
 			/>
 
 			<Container>

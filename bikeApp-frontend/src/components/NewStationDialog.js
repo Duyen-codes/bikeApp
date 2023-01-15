@@ -8,7 +8,10 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Stack } from "@mui/system";
 
-const NewStationDialog = ({ open, handleClose }) => {
+// stationService
+import stationService from "../services/stations";
+
+const NewStationDialog = ({ open, handleClose, handleAddStation }) => {
 	const [FID, setFID] = useState(0);
 	const [ID, setID] = useState(0);
 	const [Namn, setNamn] = useState("");
@@ -24,6 +27,34 @@ const NewStationDialog = ({ open, handleClose }) => {
 
 	const handleAdd = () => {
 		console.log("add new station");
+		const stationObject = {
+			FID: Number(FID),
+			ID: Number(ID),
+			Namn,
+			Name,
+			Osoite,
+			Adress,
+			Kaupunki,
+			Stad,
+			Operaattor,
+			Kapasiteet: Number(Kapasiteet),
+			x: Number(x),
+			y: Number(y),
+		};
+		handleAddStation(stationObject);
+
+		setFID(0);
+		setID(0);
+		setNamn("");
+		setName("");
+		setOsoite("");
+		setAdress("");
+		setKaupunki("");
+		setStad("");
+		setOperaattor("");
+		setKapasiteet(0);
+		setX(0);
+		setY(0);
 	};
 	return (
 		<Dialog open={open} onClose={handleClose}>
