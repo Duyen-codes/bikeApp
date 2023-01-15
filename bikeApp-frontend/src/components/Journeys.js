@@ -52,19 +52,14 @@ const Journeys = () => {
 	const [rowCount, setRowCount] = useState(0);
 
 	const fetchJourneys = async () => {
-		console.log("fetchJourneys...");
 		try {
-			console.log("page", page);
-			console.log(typeof page);
 			const { journeys, count } = await journeyService.fetchJourneys({
 				page: page + 1,
 				pageSize: rowsPerPage,
 			});
-
 			setJourneys(journeys);
 			setCount(count);
 			setRowCount(count);
-
 			setLoading(false);
 		} catch (error) {
 			setLoading(false);
@@ -73,11 +68,9 @@ const Journeys = () => {
 
 	useEffect(() => {
 		fetchJourneys();
-		console.log("page", page, "pageSize", rowsPerPage);
 	}, [page, rowsPerPage]);
 
 	const handleChangePage = (event, newPage) => {
-		console.log("newPage", newPage);
 		setPage(newPage);
 	};
 
@@ -99,91 +92,85 @@ const Journeys = () => {
 				Journeys
 			</Typography>
 
-			{count ? (
-				<Container>
-					<TableContainer sx={{ maxHeight: 650 }}>
-						<Table stickyHeader>
-							<TableHead>
-								<TableRow>
-									<StyledTableCell>
-										<b>Index</b>
-									</StyledTableCell>
-									<StyledTableCell>
-										<b>Departure time</b>
-									</StyledTableCell>
-									<StyledTableCell>
-										<b>Return time</b>
-									</StyledTableCell>
-									<StyledTableCell>
-										<b>Departure station</b>
-									</StyledTableCell>
-									<StyledTableCell>
-										<b>Return station</b>
-									</StyledTableCell>
-									<StyledTableCell>
-										<b>Covered distance (km)</b>
-									</StyledTableCell>
-									<StyledTableCell>
-										<b>Duration (m)</b>
-									</StyledTableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{journeys?.map(
-									(
-										{
-											id,
-											Departure,
-											Return,
-											Departure_station_name,
-											Return_station_name,
-											Covered_distance,
-											Duration,
-										},
-										index,
-									) => (
-										<TableRow
-											key={id}
-											hover
-											sx={{
-												"&:last-child td, &:last-child th": { border: 0 },
-												"&.MuiDataGrid-row:hover": {
-													cursor: "none",
-												},
-											}}
-										>
-											<TableCell>{index + 1}</TableCell>
-											<TableCell>
-												{new Date(Departure).toLocaleString()}
-											</TableCell>
-											<TableCell>{new Date(Return).toLocaleString()}</TableCell>
-											<TableCell>{Departure_station_name}</TableCell>
-											<TableCell>{Return_station_name}</TableCell>
-											<TableCell>
-												{(Covered_distance / 1000).toFixed(2)}
-											</TableCell>
-											<TableCell>{Math.floor(Duration / 60)}</TableCell>
-										</TableRow>
-									),
-								)}
-							</TableBody>
-						</Table>
-					</TableContainer>
-					<TablePagination
-						component='div'
-						count={count}
-						page={page}
-						rowsPerPage={rowsPerPage}
-						rowsPerPageOptions={[5, 10, 25, 50, 100]}
-						onPageChange={handleChangePage}
-						onRowsPerPageChange={handleChangeRowsPerPage}
-					/>
-				</Container>
-			) : (
-				<h4 className='text-center alert alert-primary p-4'>
-					No journeys to display
-				</h4>
-			)}
+			<Container>
+				<TableContainer sx={{ maxHeight: 650 }}>
+					<Table stickyHeader>
+						<TableHead>
+							<TableRow>
+								<StyledTableCell>
+									<b>Index</b>
+								</StyledTableCell>
+								<StyledTableCell>
+									<b>Departure time</b>
+								</StyledTableCell>
+								<StyledTableCell>
+									<b>Return time</b>
+								</StyledTableCell>
+								<StyledTableCell>
+									<b>Departure station</b>
+								</StyledTableCell>
+								<StyledTableCell>
+									<b>Return station</b>
+								</StyledTableCell>
+								<StyledTableCell>
+									<b>Covered distance (km)</b>
+								</StyledTableCell>
+								<StyledTableCell>
+									<b>Duration (m)</b>
+								</StyledTableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{journeys?.map(
+								(
+									{
+										id,
+										Departure,
+										Return,
+										Departure_station_name,
+										Return_station_name,
+										Covered_distance,
+										Duration,
+									},
+									index,
+								) => (
+									<TableRow
+										key={id}
+										hover
+										sx={{
+											"&:last-child td, &:last-child th": { border: 0 },
+											"&.MuiDataGrid-row:hover": {
+												cursor: "none",
+											},
+										}}
+									>
+										<TableCell>{index + 1}</TableCell>
+										<TableCell>
+											{new Date(Departure).toLocaleString()}
+										</TableCell>
+										<TableCell>{new Date(Return).toLocaleString()}</TableCell>
+										<TableCell>{Departure_station_name}</TableCell>
+										<TableCell>{Return_station_name}</TableCell>
+										<TableCell>
+											{(Covered_distance / 1000).toFixed(2)}
+										</TableCell>
+										<TableCell>{Math.floor(Duration / 60)}</TableCell>
+									</TableRow>
+								),
+							)}
+						</TableBody>
+					</Table>
+				</TableContainer>
+				<TablePagination
+					component='div'
+					count={count}
+					page={page}
+					rowsPerPage={rowsPerPage}
+					rowsPerPageOptions={[5, 10, 25, 50, 100]}
+					onPageChange={handleChangePage}
+					onRowsPerPageChange={handleChangeRowsPerPage}
+				/>
+			</Container>
 		</Container>
 	);
 };
