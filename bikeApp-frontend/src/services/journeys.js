@@ -2,7 +2,6 @@ import axios from "axios";
 const baseUrl = "/api/journeys";
 
 const fetchJourneys = ({ page, pageSize }) => {
-	console.log("page", page, "pageSize: ", pageSize);
 	const request = axios.get(`${baseUrl}?page=${page}&pageSize=${pageSize}`);
 	return request.then((response) => {
 		return response.data;
