@@ -146,7 +146,7 @@ const Stations = () => {
 						/>
 					</Box>
 				</div>
-				<div style={{ height: 500, width: "100%" }}>
+				<div style={{ height: 650, width: "100%" }}>
 					<DataGrid
 						loading={loading}
 						rows={rows}
