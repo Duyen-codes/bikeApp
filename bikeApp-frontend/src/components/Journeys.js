@@ -87,8 +87,6 @@ const Journeys = () => {
 	};
 
 	const fetchJourneysBySearch = async (searchQuery) => {
-		console.log("fetchJourneysBySearch...");
-
 		try {
 			const { journeys, count } = await journeyService.getJourneysBySearch({
 				searchQuery,
@@ -98,7 +96,6 @@ const Journeys = () => {
 
 			setJourneys(journeys);
 			setCount(count);
-
 			setLoading(false);
 		} catch (error) {
 			setLoading(false);
@@ -106,7 +103,6 @@ const Journeys = () => {
 	};
 
 	const handleSearch = (e) => {
-		console.log("form submit");
 		e.preventDefault();
 		if (searchTerm.trim()) {
 			fetchJourneysBySearch(searchTerm);
