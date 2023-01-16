@@ -28,18 +28,36 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/search", async (req, res) => {
-	const { search } = req.query;
-
+	console.log("req.query", req.query);
+	const search = req.query.search;
+	console.log("search", search);
+	const page = parseInt(req.query.page) || 1;
+	const pageSize = parseInt(req.query.pageSize) || 50;
+	console.log("page", page);
+	console.log("pageSize", pageSize);
 	try {
 		const searchTerm = new RegExp(search, "i");
+
+		const skip = (page - 1) * pageSize;
+		console.log(skip);
 
 		const journeys = await Journey.find({
 			$or: [
 				{ Departure_station_name: searchTerm },
 				{ Return_station_name: searchTerm },
 			],
-		});
-		const count = journeys.length;
+		})
+			.skip(skip)
+			.limit(pageSize);
+
+		const count = await Journey.find({
+			$or: [
+				{ Departure_station_name: searchTerm },
+				{ Return_station_name: searchTerm },
+			],
+		}).countDocuments({});
+
+		console.log("count: ", count);
 
 		res.json({
 			count,

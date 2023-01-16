@@ -49,10 +49,11 @@ const Journeys = () => {
 	// pagination
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(5);
-	const [rowCount, setRowCount] = useState(0);
 
 	// search
 	const [searchTerm, setSearchTerm] = useState("");
+
+	const navigate = useNavigate();
 
 	const fetchJourneys = async () => {
 		try {
@@ -62,7 +63,7 @@ const Journeys = () => {
 			});
 			setJourneys(journeys);
 			setCount(count);
-			setRowCount(count);
+
 			setLoading(false);
 		} catch (error) {
 			setLoading(false);
@@ -82,15 +83,36 @@ const Journeys = () => {
 		setPage(0);
 	};
 
-	const handleSearch = async (e) => {
+	const handleSearch = (e) => {
 		e.preventDefault();
-
-		setSearchTerm(e.target.value);
-
-		const response = await journeyService.getJourneysBySearch(e.target.value);
-		console.log("response", response);
+		if (searchTerm.trim()) {
+			setLoading(true);
+			window.history.replaceState(
+				`/journeys`,
+				"new page title",
+				`/journeys/search?page=${page}&pageSize=${rowsPerPage}&search=${searchTerm}||'none'`,
+			);
+			journeyService
+				.getJourneysBySearch({
+					searchQuery: searchTerm,
+					page: page + 1,
+					pageSize: rowsPerPage,
+				})
+				.then((response) => {
+					console.log("response", response);
+					setJourneys(response.journeys);
+					setCount(response.count);
+					setLoading(false);
+				});
+		} else {
+			navigate("/");
+		}
 	};
 
+	useEffect(() => {
+		if (count) {
+		}
+	}, []);
 	if (loading) {
 		return (
 			<Box sx={{ display: "flex", mt: "7rem", justifyContent: "center" }}>
@@ -111,9 +133,11 @@ const Journeys = () => {
 					aria-label='Search'
 					name='search'
 					value={searchTerm}
-					onChange={handleSearch}
+					onChange={(e) => setSearchTerm(e.target.value)}
 				/>
-				<button type='submit'>Search</button>
+				<button type='submit' onClick={handleSearch}>
+					Search
+				</button>
 			</form>
 
 			<Paper elevation={2}>
