@@ -113,6 +113,7 @@ some of the additional features are implemented:
 
 ## TODO
 
+- filter all the calculations per month in single station view
 - Running backend in Docker
 - Running backend in Cloud
 - Implement E2E tests
