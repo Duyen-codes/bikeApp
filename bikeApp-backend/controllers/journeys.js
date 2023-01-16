@@ -39,11 +39,11 @@ router.get("/search", async (req, res) => {
 				{ Return_station_name: searchTerm },
 			],
 		});
-		const documentCount = journeys.length;
+		const count = journeys.length;
 
 		res.json({
-			documentCount,
-			data: journeys,
+			count,
+			journeys,
 		});
 	} catch (error) {
 		res.status(404).json({
