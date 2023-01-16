@@ -28,6 +28,8 @@ import {
 } from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 
+import SearchIcon from "@mui/icons-material/Search";
+
 import journeyService from "../services/journeys";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -124,18 +126,27 @@ const Journeys = () => {
 				Journeys
 			</Typography>
 
-			<form onSubmit={handleSearch}>
-				<input
-					type='search'
-					placeholder='Search'
-					aria-label='Search'
-					name='search'
-					value={searchTerm}
-					onChange={(e) => setSearchTerm(e.target.value)}
-				/>
-				<button type='submit' onClick={handleSearch}>
-					Search
-				</button>
+			<form onSubmit={handleSearch} style={{ paddingBottom: "1rem" }}>
+				<Box sx={{ display: "flex", alignItems: "flex-end" }}>
+					<SearchIcon sx={{ mr: 1, my: 0.5 }} />
+					<TextField
+						id='standard-search'
+						label='Search'
+						type='search'
+						variant='standard'
+						name='search'
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+					/>
+					<Button
+						variant='outlined'
+						type='submit'
+						onClick={handleSearch}
+						size='small'
+					>
+						Search
+					</Button>
+				</Box>
 			</form>
 
 			<Paper elevation={2}>
