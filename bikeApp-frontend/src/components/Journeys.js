@@ -51,6 +51,9 @@ const Journeys = () => {
 	const [rowsPerPage, setRowsPerPage] = useState(5);
 	const [rowCount, setRowCount] = useState(0);
 
+	// search
+	const [searcnTerm, setSearchTerm] = useState("");
+
 	const fetchJourneys = async () => {
 		try {
 			const { journeys, count } = await journeyService.fetchJourneys({
@@ -79,6 +82,15 @@ const Journeys = () => {
 		setPage(0);
 	};
 
+	const handleSearch = async (e) => {
+		e.preventDefault();
+
+		setSearchTerm(e.target.value);
+
+		const response = await journeyService.getJourneysBySearch(e.target.value);
+		console.log("response", response);
+	};
+
 	if (loading) {
 		return (
 			<Box sx={{ display: "flex", mt: "7rem", justifyContent: "center" }}>
@@ -92,8 +104,18 @@ const Journeys = () => {
 				Journeys
 			</Typography>
 
-			<Container>
-				<TableContainer sx={{ maxHeight: 650 }}>
+			<form>
+				<input
+					type='search'
+					placeholder='Search'
+					aria-label='Search'
+					onChange={handleSearch}
+				/>
+				<button type='submit'>Search</button>
+			</form>
+
+			<Paper elevation={2}>
+				<TableContainer sx={{ maxHeight: 440 }}>
 					<Table stickyHeader>
 						<TableHead>
 							<TableRow>
@@ -170,7 +192,7 @@ const Journeys = () => {
 					onPageChange={handleChangePage}
 					onRowsPerPageChange={handleChangeRowsPerPage}
 				/>
-			</Container>
+			</Paper>
 		</Container>
 	);
 };
