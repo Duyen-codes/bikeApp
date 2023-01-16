@@ -71,8 +71,11 @@ const Journeys = () => {
 	};
 
 	useEffect(() => {
+		if (searchTerm.length > 0) {
+			fetchJourneysBySearch(searchTerm);
+		}
 		fetchJourneys();
-	}, [page, rowsPerPage]);
+	}, [page, rowsPerPage, searchTerm]);
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -83,36 +86,35 @@ const Journeys = () => {
 		setPage(0);
 	};
 
-	const handleSearch = (e) => {
-		e.preventDefault();
-		if (searchTerm.trim()) {
-			setLoading(true);
-			window.history.replaceState(
-				`/journeys`,
-				"new page title",
-				`/journeys/search?page=${page}&pageSize=${rowsPerPage}&search=${searchTerm}||'none'`,
-			);
-			journeyService
-				.getJourneysBySearch({
-					searchQuery: searchTerm,
-					page: page + 1,
-					pageSize: rowsPerPage,
-				})
-				.then((response) => {
-					console.log("response", response);
-					setJourneys(response.journeys);
-					setCount(response.count);
-					setLoading(false);
-				});
-		} else {
-			navigate("/");
+	const fetchJourneysBySearch = async (searchQuery) => {
+		console.log("fetchJourneysBySearch...");
+
+		try {
+			const { journeys, count } = await journeyService.getJourneysBySearch({
+				searchQuery,
+				page: page + 1,
+				pageSize: rowsPerPage,
+			});
+
+			setJourneys(journeys);
+			setCount(count);
+
+			setLoading(false);
+		} catch (error) {
+			setLoading(false);
 		}
 	};
 
-	useEffect(() => {
-		if (count) {
+	const handleSearch = (e) => {
+		console.log("form submit");
+		e.preventDefault();
+		if (searchTerm.trim()) {
+			fetchJourneysBySearch(searchTerm);
+		} else {
+			return;
 		}
-	}, []);
+	};
+
 	if (loading) {
 		return (
 			<Box sx={{ display: "flex", mt: "7rem", justifyContent: "center" }}>
@@ -126,7 +128,7 @@ const Journeys = () => {
 				Journeys
 			</Typography>
 
-			<form>
+			<form onSubmit={handleSearch}>
 				<input
 					type='search'
 					placeholder='Search'

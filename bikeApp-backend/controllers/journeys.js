@@ -29,17 +29,16 @@ router.get("/", async (req, res) => {
 
 router.get("/search", async (req, res) => {
 	console.log("req.query", req.query);
-	const search = req.query.search;
-	console.log("search", search);
 	const page = parseInt(req.query.page) || 1;
 	const pageSize = parseInt(req.query.pageSize) || 50;
-	console.log("page", page);
-	console.log("pageSize", pageSize);
+	const search = req.query.search;
+	console.log("search", search);
+
+	const skip = (page - 1) * pageSize;
+	console.log("skip", skip);
+
 	try {
 		const searchTerm = new RegExp(search, "i");
-
-		const skip = (page - 1) * pageSize;
-		console.log(skip);
 
 		const journeys = await Journey.find({
 			$or: [
@@ -50,6 +49,7 @@ router.get("/search", async (req, res) => {
 			.skip(skip)
 			.limit(pageSize);
 
+		console.log("journeys.length", journeys.length);
 		const count = await Journey.find({
 			$or: [
 				{ Departure_station_name: searchTerm },
