@@ -52,7 +52,7 @@ const Journeys = () => {
 	const [rowCount, setRowCount] = useState(0);
 
 	// search
-	const [searcnTerm, setSearchTerm] = useState("");
+	const [searchTerm, setSearchTerm] = useState("");
 
 	const fetchJourneys = async () => {
 		try {
@@ -109,6 +109,8 @@ const Journeys = () => {
 					type='search'
 					placeholder='Search'
 					aria-label='Search'
+					name='search'
+					value={searchTerm}
 					onChange={handleSearch}
 				/>
 				<button type='submit'>Search</button>
