@@ -61,8 +61,59 @@ My first experience with backend development was with PHP when I was studying fu
 
 ## App features
 
+### Home
+
+- [img will be here]
+- description
+
 ### Data import
 
+data is fetch from provided links and inserted into cloud database hosted on MongoDB Atlas
+
+As required:
+journeys that lasted for less than 10 seconds are not imported
+journeys that covered distances shorter than 10 meters
+
+### Journey list view
+
+pagination was implemented for listing journeys
+[add image here]
+
+### Station list
+
+all stations are fetched and displayed (457 items in total)
+
+- pagination
+- searching
+  [image here]
+
+### Single Station view
+
+all recommended features are implemented:
+
+- [x] Station name
+- [x] Station address
+- [x] Total number of journeys starting from the station
+- [x] Total number of journeys ending at the station
+
+some of the additional features are implemented:
+
+- [x] Station location on the map
+- [x] The average distance of a journey starting from the station
+- [x] The average distance of a journey ending at the station
+- [x] Top 5 most popular return stations for journeys starting from the station
+- [x] Top 5 most popular departure stations for journeys ending at the station
+      [image here ]
+
+### Extra features
+
+- REST API endpoints for storing new journeys data and new bicycle stations were implemented.
+- UI for adding journeys and bicycle stations were created. Unfortunately because of the limited database quota, these adding features and API endpoints could not be tested so the code blocks when the form is submitted is commented out for the time being.
+
 ## TODO
+
+- Running backend in Docker
+- Running backend in Cloud
+- Implement E2E tests
 
 ## Conclusion
