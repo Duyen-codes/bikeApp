@@ -108,7 +108,7 @@ some of the additional features are implemented:
 ### Extra features
 
 - REST API endpoints for storing new journeys data and new bicycle stations were implemented.
-- UI for adding journeys and bicycle stations were created. Unfortunately because of the limited database quota, these adding features and API endpoints could not be tested so the code blocks when the form is submitted is commented out for the time being.
+- UI for adding bicycle stations were created. Unfortunately because of the limited database quota, these adding features and API endpoints could not be tested so the code blocks when the form is submitted is commented out for the time being.
 
 ## TODO
 
