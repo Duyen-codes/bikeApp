@@ -28,14 +28,11 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/search", async (req, res) => {
-	console.log("req.query", req.query);
 	const page = parseInt(req.query.page) || 1;
 	const pageSize = parseInt(req.query.pageSize) || 50;
 	const search = req.query.search;
-	console.log("search", search);
 
 	const skip = (page - 1) * pageSize;
-	console.log("skip", skip);
 
 	try {
 		const searchTerm = new RegExp(search, "i");
@@ -49,15 +46,12 @@ router.get("/search", async (req, res) => {
 			.skip(skip)
 			.limit(pageSize);
 
-		console.log("journeys.length", journeys.length);
 		const count = await Journey.find({
 			$or: [
 				{ Departure_station_name: searchTerm },
 				{ Return_station_name: searchTerm },
 			],
 		}).countDocuments({});
-
-		console.log("count: ", count);
 
 		res.json({
 			count,
