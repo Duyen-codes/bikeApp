@@ -63,9 +63,10 @@ My first experience with backend development was with PHP when I was studying fu
 
 ### Home
 
-- [img will be here]
 - description
 - on Home screen top navigation
+
+![home page](/images/homepage.png)
 
 ### Data import
 
@@ -121,6 +122,7 @@ some of the additional features are implemented:
 
 - REST API endpoints for storing new journeys data and new bicycle stations were implemented.
 - UI for adding bicycle stations were created. Unfortunately because of the limited database quota, these adding features and API endpoints could not be tested so the code blocks when the form is submitted is commented out for the time being.
+- Some simple E2E tests were written for testing open different pages using navbar
 
 ## TODO
 
@@ -128,6 +130,5 @@ some of the additional features are implemented:
 - filter all the calculations per month in single station view
 - Running backend in Docker
 - Running backend in Cloud
-- Implement E2E tests
 
 ## Conclusion
