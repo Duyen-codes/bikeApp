@@ -73,4 +73,11 @@ router.post("/", async (req, res) => {
 	res.status(201).json(savedJourney);
 });
 
+// route for deleting a journey
+
+router.delete("/:id", async (req, res) => {
+	await Journey.findByIdAndRemove(req.params.id);
+	res.status(204).end();
+});
+
 module.exports = router;
