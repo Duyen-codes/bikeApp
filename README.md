@@ -141,4 +141,6 @@ some of the additional features are implemented:
 - Running backend in Docker
 - Running backend in Cloud
 
-## Conclusion
+## Final thoughts
+
+It was very exciting and challenging assignment. I spent quite a good amount of time, and I learned a lot by doing it. I highly recommend anyone giving this a try!
