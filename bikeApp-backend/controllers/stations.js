@@ -121,6 +121,7 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+	const { ID } = req.body;
 	const existingStation = await Station.findOne({ ID });
 	if (existingStation) {
 		return res.status(400).json({
