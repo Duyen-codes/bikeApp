@@ -23,101 +23,104 @@ router.get("/:id", async (req, res) => {
 	const id = req.params.id;
 
 	const station = await Station.findById(id);
+	if (station) {
+		const departuresFromStationCount = await Journey.countDocuments({
+			Departure_station_id: station.ID,
+		});
 
-	const departuresFromStationCount = await Journey.countDocuments({
-		Departure_station_id: station.ID,
-	});
+		const returnsAtStationCount = await Journey.countDocuments({
+			Return_station_id: station.ID,
+		});
 
-	const returnsAtStationCount = await Journey.countDocuments({
-		Return_station_id: station.ID,
-	});
+		// calculate average distance of a journey starting from the station
 
-	// calculate average distance of a journey starting from the station
-
-	const averageDistanceFromStation = await Journey.aggregate([
-		{
-			$match: {
-				Departure_station_id: station.ID,
-			},
-		},
-		{
-			$group: {
-				_id: null,
-				averageDistanceFromStation: {
-					$avg: "$Covered_distance",
+		const averageDistanceFromStation = await Journey.aggregate([
+			{
+				$match: {
+					Departure_station_id: station.ID,
 				},
 			},
-		},
-	]);
-
-	const departureAvgDistance = Math.round(
-		averageDistanceFromStation[0].averageDistanceFromStation,
-	);
-
-	// average distance of a journey returning at the station
-	const averageDistanceToStation = await Journey.aggregate([
-		{ $match: { Return_station_id: station.ID } },
-		{
-			$group: {
-				_id: null,
-				averageDistanceToStation: {
-					$avg: "$Covered_distance",
+			{
+				$group: {
+					_id: null,
+					averageDistanceFromStation: {
+						$avg: "$Covered_distance",
+					},
 				},
 			},
-		},
-	]);
+		]);
 
-	const returnAvgDistance = Math.round(
-		averageDistanceToStation[0].averageDistanceToStation,
-	);
+		const departureAvgDistance = Math.round(
+			averageDistanceFromStation[0].averageDistanceFromStation,
+		);
 
-	// Top 5 most popular return stations for journeys starting from the station
-
-	const top5ReturnStations = await Journey.aggregate([
-		{ $match: { Departure_station_id: station.ID } },
-		{
-			$group: {
-				_id: "$Return_station_name",
-				count: {
-					$count: {},
+		// average distance of a journey returning at the station
+		const averageDistanceToStation = await Journey.aggregate([
+			{ $match: { Return_station_id: station.ID } },
+			{
+				$group: {
+					_id: null,
+					averageDistanceToStation: {
+						$avg: "$Covered_distance",
+					},
 				},
 			},
-		},
-		{
-			$sort: { count: -1 },
-		},
-		{
-			$limit: 5,
-		},
-	]);
+		]);
 
-	const top5DepartureStations = await Journey.aggregate([
-		{ $match: { Return_station_id: station.ID } },
-		{
-			$group: {
-				_id: "$Departure_station_name",
-				count: {
-					$count: {},
+		const returnAvgDistance = Math.round(
+			averageDistanceToStation[0].averageDistanceToStation,
+		);
+
+		// Top 5 most popular return stations for journeys starting from the station
+
+		const top5ReturnStations = await Journey.aggregate([
+			{ $match: { Departure_station_id: station.ID } },
+			{
+				$group: {
+					_id: "$Return_station_name",
+					count: {
+						$count: {},
+					},
 				},
 			},
-		},
-		{
-			$sort: { count: -1 },
-		},
-		{
-			$limit: 5,
-		},
-	]);
+			{
+				$sort: { count: -1 },
+			},
+			{
+				$limit: 5,
+			},
+		]);
 
-	res.json({
-		station,
-		departuresFromStationCount,
-		returnsAtStationCount,
-		departureAvgDistance,
-		returnAvgDistance,
-		top5ReturnStations,
-		top5DepartureStations,
-	});
+		const top5DepartureStations = await Journey.aggregate([
+			{ $match: { Return_station_id: station.ID } },
+			{
+				$group: {
+					_id: "$Departure_station_name",
+					count: {
+						$count: {},
+					},
+				},
+			},
+			{
+				$sort: { count: -1 },
+			},
+			{
+				$limit: 5,
+			},
+		]);
+
+		res.json({
+			station,
+			departuresFromStationCount,
+			returnsAtStationCount,
+			departureAvgDistance,
+			returnAvgDistance,
+			top5ReturnStations,
+			top5DepartureStations,
+		});
+	} else {
+		res.status(404).end();
+	}
 });
 
 router.post("/", async (req, res) => {
