@@ -27,7 +27,7 @@ React is my first JavaScript framework that I have picked up and built several w
 
 ### Backend: NodeJS + Express
 
-My first experience with backend development was with PHP when I was studying fullstack development program. But since I've seen that NodeJS is more of in demand and it always appears in job search with React so I self-taught NodeJS and Express by doing personal projects and taking an online course by University of Helsinki. I have found it quite nice to work with since I always want to go for fullstack development. I'm also interested in Java and C#/.NET so I definitely want to extend my tech skills with other technologies in the future.
+My first experience with backend development was with PHP when I was studying fullstack development program. But since I've found that NodeJS offers the chance to do more with JavaScript so I self-taught NodeJS and Express by doing personal projects and taking an online course by University of Helsinki. I have found it quite nice to work with since I always want to go for fullstack development. I'm also interested in Java and C#/.NET so I definitely want to extend my tech skills with other technologies in the future.
 
 - nodejs
 - express
