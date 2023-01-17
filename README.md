@@ -4,8 +4,11 @@ Application for displaying data from journeys made with city bikes in the Helsin
 
 ## Project Description
 
+This application was created as my solution to [Solita Dev Academy Pre-assignment](https://github.com/solita/dev-academy-2022-fall-exercise/tree/144fe777cdd4830dfa706a0d1dcb117b3ba5ea09).
+
 ## Tech Stack
 
+<hr />
 Since there are no limits to which technologies to use, I have decided to go with MERN stack since I'm mostly familiar with and have really enjoyed working with JavaScript.
 
 ### Database
@@ -36,18 +39,21 @@ My first experience with backend development was with PHP when I was studying fu
 
 ## Installation
 
-- clone the repo
+<hr />
+
+- clone the repository
+
 - go to bikeApp-backend directory
 
   - install all up-to-date dependencies of the project defined in package.json with running the below commands in the bikeApp-backend root directory
 
-  ```shell
-    npm install
-  ```
+```shell
+  npm install
+```
 
-  ```shell
-  npm run dev
-  ```
+```shell
+npm run dev
+```
 
 - go to bikeApp-frontend directory
   - install dev dependencies by running
@@ -60,6 +66,8 @@ My first experience with backend development was with PHP when I was studying fu
   ```
 
 ## App features
+
+<hr />
 
 ### Home
 
@@ -125,6 +133,8 @@ some of the additional features are implemented:
 - Some simple E2E tests were written for testing open different pages using navbar
 
 ## TODO
+
+<hr />
 
 - Journey list view: ordering per column, filtering
 - filter all the calculations per month in single station view
