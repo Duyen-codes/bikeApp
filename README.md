@@ -100,12 +100,14 @@ all stations are fetched and displayed (457 items in total)
 
 ### Single Station view
 
-all recommended features are implemented:
+All recommended features are implemented:
 
 - [x] Station name
 - [x] Station address
 - [x] Total number of journeys starting from the station
 - [x] Total number of journeys ending at the station
+
+![single station ](/images/single_station.png)
 
 some of the additional features are implemented:
 
@@ -114,7 +116,6 @@ some of the additional features are implemented:
 - [x] The average distance of a journey ending at the station
 - [x] Top 5 most popular return stations for journeys starting from the station
 - [x] Top 5 most popular departure stations for journeys ending at the station
-      [image here ]
 
 ### Extra features
 
