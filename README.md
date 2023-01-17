@@ -2,6 +2,8 @@
 
 Application for displaying data from journeys made with city bikes in the Helsinki Capital area.
 
+- View Demo: [https://citybike.fly.dev/](https://citybike.fly.dev/)
+
 ## Project Description
 
 This application was created as my solution to [Solita Dev Academy Pre-assignment](https://github.com/solita/dev-academy-2022-fall-exercise/tree/144fe777cdd4830dfa706a0d1dcb117b3ba5ea09).
