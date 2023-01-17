@@ -161,7 +161,7 @@ const Stations = () => {
 						<SearchIcon sx={{ mr: 1, my: 0.5 }} />
 						<TextField
 							id='standard-basic'
-							label='Search'
+							label='Search by station name'
 							type='search'
 							value={search}
 							onChange={({ target }) => setSearch(target.value)}
