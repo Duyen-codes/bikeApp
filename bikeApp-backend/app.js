@@ -13,7 +13,7 @@ const fetch = require("node-fetch");
 const journeysRouter = require("./controllers/journeys");
 const stationsRouter = require("./controllers/stations");
 
-const { errorHandler } = require("./utils/middleware");
+const middleware = require("./utils/middleware");
 const logger = require("./utils/logger");
 
 // Connect to the MongoDB cluster
@@ -30,6 +30,7 @@ mongoose
 app.use(cors());
 app.use(express.static("build"));
 app.use(express.json());
+app.use(middleware.requestLogger);
 
 const journeyUrls = [
 	"https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv",
@@ -122,6 +123,6 @@ mongoose.connection.on("open", function (ref) {
 app.use("/api/journeys", journeysRouter);
 app.use("/api/stations", stationsRouter);
 
-app.use(errorHandler);
+app.use(middleware.errorHandler);
 
 module.exports = app;
