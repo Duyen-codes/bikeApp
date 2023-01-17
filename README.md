@@ -82,7 +82,7 @@ journeys that covered distances shorter than 10 meters
 - List journeys: pagination table was implemented for listing journeys
 - For each journey show departure and return stations, covered distance in kilometers and duration in minutes
 
-![alt text](./images/journeys.png)
+![journey list](./images/journeys.png)
 
 #### Additional
 
@@ -95,6 +95,8 @@ all stations are fetched and displayed (457 items in total)
 
 - pagination
 - searching
+
+![station list](./images/stations.png)
 
 ### Single Station view
 
