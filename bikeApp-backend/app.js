@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
+const path = require("path");
 
 const csvtojson = require("csvtojson");
 const fastcsv = require("fast-csv");
@@ -122,6 +123,10 @@ mongoose.connection.on("open", function (ref) {
 
 app.use("/api/journeys", journeysRouter);
 app.use("/api/stations", stationsRouter);
+
+app.get("*", (req, res) => {
+	res.sendFile(path.join(__dirname, "./build/index.html"));
+});
 
 app.use(middleware.errorHandler);
 
