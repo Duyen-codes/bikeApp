@@ -88,14 +88,14 @@ journeys that covered distances shorter than 10 meters
 #### Additional
 
 - [x] Pagination
-- [x] Searching
+- [x] Searching is done from backend by sending request to /search route
 
 ### Station list
 
 all stations are fetched and displayed (457 items in total)
 
 - pagination
-- searching
+- searching is done from frontend
 
 ![station list](./images/stations.png)
 
