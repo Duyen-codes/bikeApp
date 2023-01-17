@@ -95,7 +95,6 @@ all stations are fetched and displayed (457 items in total)
 
 - pagination
 - searching
-  [image here]
 
 ### Single Station view
 
