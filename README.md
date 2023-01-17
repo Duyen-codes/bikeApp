@@ -77,8 +77,17 @@ journeys that covered distances shorter than 10 meters
 
 ### Journey list view
 
-pagination was implemented for listing journeys
+#### Recommended
+
+- List journeys: pagination table was implemented for listing journeys
+- For each journey show departure and return stations, covered distance in kilometers and duration in minutes
+
 [add image here]
+
+#### Additional
+
+- [x] Pagination
+- [x] Searching
 
 ### Station list
 
@@ -113,6 +122,7 @@ some of the additional features are implemented:
 
 ## TODO
 
+- Journey list view: ordering per column, filtering
 - filter all the calculations per month in single station view
 - Running backend in Docker
 - Running backend in Cloud
