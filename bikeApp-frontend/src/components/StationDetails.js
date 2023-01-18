@@ -72,16 +72,6 @@ const StationDetails = (props) => {
 		fetchStationData();
 	}, [stationId]);
 
-	// if (loading) {
-	// 	return (
-	// 		<Box
-	// 			sx={{ display: "flex", paddingTop: "7rem", justifyContent: "center" }}
-	// 		>
-	// 			<CircularProgress />
-	// 		</Box>
-	// 	);
-	// }
-
 	return (
 		<Fade>
 			<Container
