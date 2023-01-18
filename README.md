@@ -126,7 +126,25 @@ some of the additional features are implemented:
 - [x] Top 5 most popular return stations for journeys starting from the station
 - [x] Top 5 most popular departure stations for journeys ending at the station
 
-### Extra features
+### Running tests
+
+Tests directory are located inside frontend root directory. Go to frontend directory
+
+- Tests can be run from browser by running command:
+
+```shell
+npm run cypress:open
+```
+
+a window will be automatically open for you to choose which browser you wanna run the tests on. Choose a browser and run tests.
+
+- OR they can be run from the command line with the command:
+  and run command:
+  ```shell
+  npm run test:e2e
+  ```
+
+### Extra features implemented
 
 - REST API endpoints for storing new journeys data and new bicycle stations were implemented.
 - UI for adding bicycle stations were created. Unfortunately because of the limited database quota, these adding features and API endpoints could not be tested so the code blocks when the form is submitted is commented out for the time being.
@@ -144,3 +162,7 @@ some of the additional features are implemented:
 ## Final thoughts
 
 It was very exciting and challenging assignment. I spent quite a good amount of time, and I learned a lot by doing it. I highly recommend anyone giving this a try!
+
+```
+
+```
