@@ -20,6 +20,8 @@ router.get("/", async (req, res) => {
 	}
 });
 
+// @desc get a single station and its statistics
+// @route GET /api/stations/:id
 router.get("/:id", async (req, res) => {
 	const id = req.params.id;
 
