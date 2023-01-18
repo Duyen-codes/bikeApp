@@ -126,6 +126,8 @@ router.get("/:id", async (req, res) => {
 	}
 });
 
+// @desc  Post new station data
+// @route POST api/stations
 router.post("/", async (req, res) => {
 	const { ID } = req.body;
 	const existingStation = await Station.findOne({ ID });
