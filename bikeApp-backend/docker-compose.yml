@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  nodejs:
+    container_name: nodejs
+    restart: unless-stopped
+    build: .
+    env_file: .env
+    environment:
+      - MONGODB_URI=$MONGODB_URI
+      - PORT=$PORT
+    ports:
+      - "3003:3003"
+    volumes:
+      -
+    depends_on:
+      - mongo
+  client: 
+    container_name: client-container
+    restart: always
+    build: ./bikeApp-frontend
+  mongo:
+    image: mongo
+    container_name: mongo-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - MONGODB_URI=$MONGODB_URI
+    
+
+    
