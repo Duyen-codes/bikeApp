@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Children } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation, useParams } from "react-router-dom";
 import {
@@ -6,19 +6,15 @@ import {
 	CardContent,
 	Container,
 	Divider,
-	List,
-	Paper,
-	Stack,
 	Typography,
 } from "@mui/material";
-import ListItem from "@mui/material/ListItem";
+
 import Box from "@mui/material/Box";
 
 import Grid from "@mui/material/Grid";
 import GoogleMap from "./GoogleMap";
 import { Fade } from "react-awesome-reveal";
 import CircularProgress from "@mui/material/CircularProgress";
-import { borderRight } from "@mui/system";
 
 const StationDetails = (props) => {
 	const { state } = useLocation();
