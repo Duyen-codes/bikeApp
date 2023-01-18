@@ -28,6 +28,8 @@ router.get("/", async (req, res) => {
 	}
 });
 
+//  @desc  Get data of the search by name journey
+//  @route GET /api/journeys/search
 router.get("/search", async (req, res) => {
 	const page = parseInt(req.query.page) || 1;
 	const pageSize = parseInt(req.query.pageSize) || 50;
