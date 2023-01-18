@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   nodejs:
-    container_name: nodejs
+    container_name: nodejs-container
     restart: unless-stopped
     build: .
     env_file: .env
@@ -10,17 +10,11 @@ services:
       - PORT=$PORT
     ports:
       - "3003:3003"
-    volumes:
-      -
     depends_on:
       - mongo
-  client: 
-    container_name: client-container
-    restart: always
-    build: ./bikeApp-frontend
   mongo:
     image: mongo
-    container_name: mongo-backend
+    container_name: mongo-container
     restart: unless-stopped
     env_file:
       - .env
