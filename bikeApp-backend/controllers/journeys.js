@@ -67,7 +67,8 @@ router.get("/search", async (req, res) => {
 	}
 });
 
-// endpoint to store new journey
+// @desc Post new journey data
+// @route POST /api/journeys
 router.post("/", async (req, res) => {
 	const journey = new Journey({ ...req.body });
 
