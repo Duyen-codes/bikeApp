@@ -78,7 +78,7 @@ The homepage is fully responsive on different screen sizes with sticky navigatio
 
 ### Data import
 
-data is fetch from provided links and inserted into cloud database hosted on MongoDB Atlas
+Data is fetch from provided links and inserted into cloud database hosted on MongoDB Atlas
 
 As required:
 journeys that lasted for less than 10 seconds are not imported
