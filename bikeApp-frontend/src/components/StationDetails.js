@@ -72,15 +72,15 @@ const StationDetails = (props) => {
 		fetchStationData();
 	}, [stationId]);
 
-	if (loading) {
-		return (
-			<Box
-				sx={{ display: "flex", paddingTop: "7rem", justifyContent: "center" }}
-			>
-				<CircularProgress />
-			</Box>
-		);
-	}
+	// if (loading) {
+	// 	return (
+	// 		<Box
+	// 			sx={{ display: "flex", paddingTop: "7rem", justifyContent: "center" }}
+	// 		>
+	// 			<CircularProgress />
+	// 		</Box>
+	// 	);
+	// }
 
 	return (
 		<Fade>
@@ -94,84 +94,99 @@ const StationDetails = (props) => {
 				<Typography variant='h2' fontWeight='bold'>
 					{station.Name}
 				</Typography>
-				<Typography sx={{ fontWeight: "bold" }}>
+				<Typography sx={{ fontWeight: "bold", mb: 1.5 }} variant='h6'>
 					Address: {station.Adress}, {station.Kaupunki}
 				</Typography>
 
-				<Grid
-					container
-					spacing={{ xs: 2, md: 3 }}
-					sx={{ borderColor: "#e0e0e0", pt: "2rem", mb: "2rem" }}
-				>
-					<Grid item xs={12} sm={6} md={4} sx={{ borderColor: "#e0e0e0" }}>
-						<Card sx={{ height: "100%" }}>
-							<CardContent sx={{ textAlign: "left" }}>
-								<Typography>
-									Total number of journeys starting from the station:{" "}
-									{departuresFromStationCount}
-								</Typography>
-
-								<Divider sx={{ mb: 1 }} />
-								<Typography>
-									Total number of journeys ending at the station:{" "}
-									{returnsAtStationCount}
-								</Typography>
-								<Divider sx={{ mb: 1 }} />
-								<Typography>
-									The average distance of a journey starting from the station:{" "}
-									{departureAvgDistance}m
-								</Typography>
-								<Divider sx={{ mb: 1 }} />
-								<Typography>
-									The average distance of a journey ending at the station:{" "}
-									{returnAvgDistance}m
-								</Typography>
-							</CardContent>
-						</Card>
-					</Grid>
-
-					<Grid item xs={12} sm={6} md={4}>
-						<Card>
-							<CardContent sx={{ textAlign: "left" }}>
-								<Typography variant='h6'>
-									Top 5 most popular return stations for journeys starting from
-									the station:
-								</Typography>
-								{top5ReturnStations.map((station) => (
-									<>
-										<Typography key={station._id}>
-											{station._id}
-											<p>Returns: {station.count}</p>
-										</Typography>
-										<Divider sx={{ mb: 1 }} />
-									</>
-								))}
-							</CardContent>
-						</Card>
-					</Grid>
-
-					<Grid item xs={12} sm={6} md={4}>
-						<Card sx={{ height: "100%" }}>
-							<CardContent sx={{ textAlign: "left" }}>
-								<Typography variant='h6'>
-									Top 5 most popular departure stations for journeys returning
-									at the station:
-								</Typography>
-								{top5DepartureStations.map((station) => (
-									<>
-										<Typography key={station._id}>
-											{station._id}
-											<p>Departures: {station.count}</p>
-										</Typography>
-										<Divider sx={{ mb: 1 }} />
-									</>
-								))}
-							</CardContent>
-						</Card>
-					</Grid>
-				</Grid>
-
 				<GoogleMap station={station} />
+				{loading && (
+					<Box
+						sx={{
+							display: "flex",
+							flexDirection: "column",
+							justifyContent: "center",
+							alignItems: "center",
+							paddingTop: "2rem",
+						}}
+					>
+						<CircularProgress />
+						<p> Loading more data...</p>
+					</Box>
+				)}
+				{!loading && (
+					<Grid
+						container
+						spacing={{ xs: 2, md: 3 }}
+						sx={{ borderColor: "#e0e0e0", pt: "2rem", mb: "2rem" }}
+					>
+						<Grid item xs={12} sm={6} md={4} sx={{ borderColor: "#e0e0e0" }}>
+							<Card sx={{ height: "100%" }}>
+								<CardContent sx={{ textAlign: "left" }}>
+									<Typography>
+										Total number of journeys starting from the station:{" "}
+										{departuresFromStationCount}
+									</Typography>
+
+									<Divider sx={{ mb: 1 }} />
+									<Typography>
+										Total number of journeys ending at the station:{" "}
+										{returnsAtStationCount}
+									</Typography>
+									<Divider sx={{ mb: 1 }} />
+									<Typography>
+										The average distance of a journey starting from the station:{" "}
+										{departureAvgDistance}m
+									</Typography>
+									<Divider sx={{ mb: 1 }} />
+									<Typography>
+										The average distance of a journey ending at the station:{" "}
+										{returnAvgDistance}m
+									</Typography>
+								</CardContent>
+							</Card>
+						</Grid>
+
+						<Grid item xs={12} sm={6} md={4}>
+							<Card>
+								<CardContent sx={{ textAlign: "left" }}>
+									<Typography variant='h6'>
+										Top 5 most popular return stations for journeys starting
+										from the station:
+									</Typography>
+									{top5ReturnStations.map((station) => (
+										<>
+											<Typography key={station._id}>
+												{station._id}
+												<p>Returns: {station.count}</p>
+											</Typography>
+											<Divider sx={{ mb: 1 }} />
+										</>
+									))}
+								</CardContent>
+							</Card>
+						</Grid>
+
+						<Grid item xs={12} sm={6} md={4}>
+							<Card sx={{ height: "100%" }}>
+								<CardContent sx={{ textAlign: "left" }}>
+									<Typography variant='h6'>
+										Top 5 most popular departure stations for journeys returning
+										at the station:
+									</Typography>
+									{top5DepartureStations.map((station) => (
+										<>
+											<Typography key={station._id}>
+												{station._id}
+												<p>Departures: {station.count}</p>
+											</Typography>
+											<Divider sx={{ mb: 1 }} />
+										</>
+									))}
+								</CardContent>
+							</Card>
+						</Grid>
+					</Grid>
+				)}
 			</Container>
 		</Fade>
 	);
