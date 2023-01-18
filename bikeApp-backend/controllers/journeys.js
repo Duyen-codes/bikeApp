@@ -77,8 +77,9 @@ router.post("/", async (req, res) => {
 	res.status(201).json(savedJourney);
 });
 
-// route for deleting a journey
-
+// @desc Delete a journey
+// @route DELETE /api/journeys/:id
+// This route is not being used at the moment in the application
 router.delete("/:id", async (req, res) => {
 	await Journey.findByIdAndRemove(req.params.id);
 	res.status(204).end();
