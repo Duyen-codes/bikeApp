@@ -109,6 +109,7 @@ all stations are fetched and displayed (457 items in total)
 
 ### Single Station view
 
+When a row from the station table is clicked, single station and its data will be fetched and viewed. This might take a moment.
 All recommended features are implemented:
 
 - [x] Station name
