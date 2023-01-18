@@ -3,7 +3,8 @@ const router = require("express").Router();
 const Journey = require("../models/journey");
 const Station = require("../models/station");
 
-// fetch journeys from db
+// @desc Get all journeys from db
+// @route GET /api/journeys
 router.get("/", async (req, res) => {
 	const page = parseInt(req.query.page) || 1;
 	const pageSize = parseInt(req.query.pageSize) || 50;
