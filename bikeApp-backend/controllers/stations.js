@@ -3,7 +3,8 @@ const router = require("express").Router();
 const Journey = require("../models/journey");
 const Station = require("../models/station");
 
-// fetch stations from db
+// @desc get all current stations from db
+// @route GET /api/stations
 router.get("/", async (req, res) => {
 	try {
 		let result = await Station.find({});
