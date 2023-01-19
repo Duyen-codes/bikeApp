@@ -39,6 +39,8 @@ My first experience with backend development was with PHP when I was studying fu
 - csvtojson
 - node-fetch
 
+Additionally REST client and postman were used for testing API endpoints. As I want to get more familiar with testing, I configured cypress setup and wrote some simple tests. I wrote e2e tests before once when taking fullstack course by University of Helsinki.
+
 ## Installation
 
 <hr />
