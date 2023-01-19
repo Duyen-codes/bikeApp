@@ -9,7 +9,7 @@ WORKDIR /bikeApp-backend
 COPY package*.json /bikeApp-backend/
 
 # install project dependencies 
-RUN npm install
+RUN npm ci
 
 # copy project files and folders to the current working directory (i.e 'bikeApp-backend' folder)
 COPY . /bikeApp-backend/
