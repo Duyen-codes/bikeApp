@@ -49,11 +49,19 @@ Additionally REST client and postman were used for testing API endpoints. As I w
 
 - go to bikeApp-backend directory
 
-  - install all up-to-date dependencies of the project defined in package.json with running the below commands in the bikeApp-backend root directory
+  - install dependencies with
 
 ```shell
   npm install
 ```
+
+Run with
+
+```shell
+npm start
+```
+
+Or in development mode with
 
 ```shell
 npm run dev
@@ -165,6 +173,10 @@ a window will be automatically open for you to choose which browser you wanna ru
 ## Final thoughts
 
 It was very exciting and challenging assignment. I spent quite a good amount of time, and I learned a lot by doing it. I highly recommend anyone giving this a try!
+
+```
+
+```
 
 ```
 
