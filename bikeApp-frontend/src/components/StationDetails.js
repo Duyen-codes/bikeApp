@@ -140,13 +140,13 @@ const StationDetails = (props) => {
 										from the station:
 									</Typography>
 									{top5ReturnStations.map((station) => (
-										<>
-											<Typography key={station._id}>
-												{station._id}
-												<p>Returns: {station.count}</p>
+										<div key={station._id}>
+											<Typography>
+												{station._id} <br />
+												Returns: {station.count}
 											</Typography>
 											<Divider sx={{ mb: 1 }} />
-										</>
+										</div>
 									))}
 								</CardContent>
 							</Card>
@@ -160,13 +160,13 @@ const StationDetails = (props) => {
 										at the station:
 									</Typography>
 									{top5DepartureStations.map((station) => (
-										<>
-											<Typography key={station._id}>
-												{station._id}
-												<p>Departures: {station.count}</p>
+										<div key={station._id}>
+											<Typography>
+												{station._id} <br />
+												Departures: {station.count}
 											</Typography>
 											<Divider sx={{ mb: 1 }} />
-										</>
+										</div>
 									))}
 								</CardContent>
 							</Card>
