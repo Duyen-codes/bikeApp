@@ -31,6 +31,7 @@ import JourneyFormDialog from "./JourneyFormDialog";
 
 const JourneyList = () => {
 	const [journeys, setJourneys] = useState([]);
+	const [count, setCount] = useState(journeys.length);
 	const [loading, setLoading] = useState(true);
 
 	const [page, setPage] = useState(1);
@@ -53,6 +54,7 @@ const JourneyList = () => {
 				});
 
 				setJourneys(journeys);
+				setCount(count);
 				setLoading(false);
 			} catch (error) {
 				console.log(error);
@@ -164,7 +166,7 @@ const JourneyList = () => {
 					<DataGrid
 						loading={loading}
 						rows={rows}
-						rowCount={journeys.length}
+						rowCount={count}
 						columns={columns}
 						pageSize={pageSize}
 						onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
