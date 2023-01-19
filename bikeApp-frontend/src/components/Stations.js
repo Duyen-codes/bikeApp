@@ -167,6 +167,7 @@ const Stations = () => {
 							onChange={({ target }) => setSearch(target.value)}
 							variant='standard'
 							size='small'
+							sx={{ width: "25ch" }}
 						/>
 					</Box>
 				</div>
