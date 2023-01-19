@@ -15,6 +15,7 @@ import Grid from "@mui/material/Grid";
 import GoogleMap from "./GoogleMap";
 import { Fade } from "react-awesome-reveal";
 import CircularProgress from "@mui/material/CircularProgress";
+import FilterPerMonth from "./FilterPerMonth";
 
 const StationDetails = (props) => {
 	const { state } = useLocation();
@@ -85,6 +86,8 @@ const StationDetails = (props) => {
 				</Typography>
 
 				<GoogleMap station={station} />
+
+				<FilterPerMonth />
 				{loading && (
 					<Box
 						sx={{
