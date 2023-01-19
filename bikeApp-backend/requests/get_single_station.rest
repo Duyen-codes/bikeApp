@@ -1,1 +1,0 @@
-GET http://localhost:3003/api/stations/63b6d68584cc881b568af4c2 HTTP/1.1
