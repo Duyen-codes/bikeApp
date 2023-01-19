@@ -7,6 +7,7 @@ const Station = require("../models/station");
 // @route GET /api/journeys
 router.get("/", async (req, res) => {
 	const page = parseInt(req.query.page) || 1;
+	console.log("page", req.query.page);
 	const pageSize = parseInt(req.query.pageSize) || 50;
 	try {
 		const count = await Journey.countDocuments({});

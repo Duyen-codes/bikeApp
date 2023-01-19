@@ -34,9 +34,9 @@ const JourneyList = () => {
 	const [count, setCount] = useState(journeys.length);
 	const [loading, setLoading] = useState(true);
 
-	const [page, setPage] = useState(1);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
-	const [pageSize, setPageSize] = useState(50);
+	const [page, setPage] = useState(0);
+	const [rowsPerPage, setRowsPerPage] = useState(5);
+	const [pageSize, setPageSize] = useState(5);
 
 	const [search, setSearch] = useState("");
 
@@ -47,10 +47,13 @@ const JourneyList = () => {
 
 	useEffect(() => {
 		const fetchAllJourneys = async () => {
+			console.log("page", page);
+			console.log("pageSize", pageSize);
+			console.log("rowsPerPage", rowsPerPage);
 			try {
 				const { journeys, count } = await journeyService.fetchJourneys({
-					page,
-					pageSize,
+					page: page + 1,
+					pageSize: rowsPerPage,
 				});
 
 				setJourneys(journeys);
@@ -111,7 +114,9 @@ const JourneyList = () => {
 	});
 
 	const handleChangeRowsPerPage = (event) => {
+		console.log("rowsPerPage change...");
 		setRowsPerPage(parseInt(event.target.value, 10));
+		console.log("rowsPerPage", rowsPerPage);
 		setPage(0);
 	};
 
@@ -169,10 +174,11 @@ const JourneyList = () => {
 						rowCount={count}
 						columns={columns}
 						pageSize={pageSize}
+						rowsPerPage={rowsPerPage}
 						onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-						rowsPerPageOptions={[10, 25, 50, 100]}
-						onRowsPerPageChange={handleChangeRowsPerPage}
+						rowsPerPageOptions={[5, 10, 25, 50, 100]}
 						onPageChange={handleChangePage}
+						onRowsPerPageChange={handleChangeRowsPerPage}
 						components={{
 							Toolbar: () => (
 								<CustomToolbar
