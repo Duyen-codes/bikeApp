@@ -47,9 +47,12 @@ const JourneyList = () => {
 	useEffect(() => {
 		const fetchAllJourneys = async () => {
 			try {
-				const { data } = await journeyService.fetchJourneys({ page, pageSize });
+				const { journeys, count } = await journeyService.fetchJourneys({
+					page,
+					pageSize,
+				});
 
-				setJourneys(data);
+				setJourneys(journeys);
 				setLoading(false);
 			} catch (error) {
 				console.log(error);
@@ -64,25 +67,28 @@ const JourneyList = () => {
 		{
 			field: "Departure",
 			headerName: "Departure time",
-			width: 300,
+			width: 220,
 		},
 		{
 			field: "Return",
 			headerName: "Return time",
-			width: 200,
+			width: 220,
 		},
 		{
 			field: "Departure_station_name",
 			headerName: "Departure station",
+			width: 180,
 		},
 
 		{
 			field: "Return_station_name",
 			headerName: "Return station",
+			width: 180,
 		},
 		{
 			field: "Covered_distance",
 			headerName: "Covered distance (km)",
+			width: 160,
 		},
 		{
 			field: "Duration",
@@ -92,7 +98,7 @@ const JourneyList = () => {
 
 	const rows = journeys.map((journey) => {
 		return {
-			id: station.id,
+			id: journey.id,
 			Departure: journey.Departure,
 			Return: journey.Return,
 			Departure_station_name: journey.Departure_station_name,
@@ -129,9 +135,9 @@ const JourneyList = () => {
 	return (
 		<Container sx={{ pt: "7rem" }}>
 			<Typography align='center' variant='h2'>
-				Stations
+				Journey List
 			</Typography>
-			<NewStationDialog
+			<JourneyFormDialog
 				open={open}
 				setOpen={setOpen}
 				handleClose={handleClose}
@@ -144,7 +150,7 @@ const JourneyList = () => {
 						<SearchIcon sx={{ mr: 1, my: 0.5 }} />
 						<TextField
 							id='standard-basic'
-							label='Search by station name'
+							label='Search by journey name'
 							type='search'
 							value={search}
 							onChange={({ target }) => setSearch(target.value)}
@@ -158,7 +164,7 @@ const JourneyList = () => {
 					<DataGrid
 						loading={loading}
 						rows={rows}
-						rowCount={stations.length}
+						rowCount={journeys.length}
 						columns={columns}
 						pageSize={pageSize}
 						onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
@@ -177,7 +183,6 @@ const JourneyList = () => {
 							LoadingOverlay: LinearProgress,
 						}}
 						disableSelectionOnClick
-						onRowClick={handleRowClick}
 						sx={{
 							"&.MuiDataGrid-row:hover": {
 								cursor: "pointer",
