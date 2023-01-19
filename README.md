@@ -45,7 +45,7 @@ Additionally REST client and postman were used for testing API endpoints. As I w
 
 <hr />
 
-- clone the repository
+- clone the repository (on 'main' branch)
 
 - go to bikeApp-backend directory
 
