@@ -6,8 +6,8 @@ services:
     build: .
     env_file: .env
     environment:
-      - MONGODB_URI=$MONGODB_URI
-      - PORT=$PORT
+      - MONGODB_URI=${MONGODB_URI}
+      - PORT=${PORT}
     ports:
       - "3003:3003"
     depends_on:
@@ -19,7 +19,7 @@ services:
     env_file:
       - .env
     environment:
-      - MONGODB_URI=$MONGODB_URI
+      - MONGODB_URI=${MONGODB_URI}
     
 
     
