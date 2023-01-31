@@ -1,15 +1,9 @@
 import React from "react";
-import Pagination from "./Pagination";
 import { useState, useEffect } from "react";
-import { Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import {
 	DataGrid,
-	GridColDef,
-	GridValueGetterParams,
-	GridRowParams,
-	GridToolbar,
 	GridToolbarContainer,
 	GridToolbarColumnsButton,
 	GridToolbarFilterButton,
@@ -60,7 +54,7 @@ const Stations = () => {
 		fetchAllStations();
 	}, [page, search]);
 
-	const columns: GridColDef[] = [
+	const columns = [
 		{
 			field: "name",
 			headerName: "Station name",
@@ -118,11 +112,7 @@ const Stations = () => {
 		setPage(newPage);
 	};
 
-	const handleRowClick: GridEventListener<"rowClick"> = (
-		params,
-		event,
-		details,
-	) => {
+	const handleRowClick = (params, event, details) => {
 		navigate(`/stations/${params.row.id}`, {
 			state: stations,
 		});

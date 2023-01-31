@@ -16,7 +16,7 @@ const GoogleMap = ({ station }) => {
 		lng: station?.x,
 	});
 
-	const render = (status: Status) => {
+	const render = (status) => {
 		switch (status) {
 			case Status.LOADING:
 				return <p>loading map...</p>;
