@@ -6,7 +6,6 @@ import { Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import { Container } from "@mui/system";
 
-import { DataGrid } from "@mui/x-data-grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 
