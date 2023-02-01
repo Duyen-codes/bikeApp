@@ -97,7 +97,7 @@ const insertStationToMongoDB = () => {
 };
 
 const insertJourneysToMongoDB = () => {
-	journeyUrls.map(async (item) => await fetchJourney(item));
+	journeyUrls.forEach(async (item) => await fetchJourney(item));
 };
 
 // Check if database exists, if not insert data to MongoDB
