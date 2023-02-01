@@ -1,23 +1,15 @@
 import React from "react";
-
 import { useState, useEffect } from "react";
-import { Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
 
 import { styled } from "@mui/material/styles";
 import { Container } from "@mui/system";
-
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
-
 import { Typography } from "@mui/material";
 import {
 	TextField,
-	InputAdornment,
-	IconButton,
 	Button,
-	Snackbar,
 	Table,
-	TableCellClasses,
 	TableHead,
 	TableRow,
 	TableBody,
@@ -26,7 +18,6 @@ import {
 	TablePagination,
 } from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-
 import SearchIcon from "@mui/icons-material/Search";
 
 import journeyService from "../services/journeys";
@@ -53,8 +44,6 @@ const Journeys = () => {
 
 	// search
 	const [searchTerm, setSearchTerm] = useState("");
-
-	const navigate = useNavigate();
 
 	const fetchJourneys = async () => {
 		try {
