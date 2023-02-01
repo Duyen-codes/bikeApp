@@ -77,7 +77,7 @@ const fetchJourney = (url) => {
 		});
 };
 
-const insertStationToMongoDB = (stationUrl) => {
+const insertStationToMongoDB = () => {
 	needle
 		.get(stationUrl)
 		.pipe(fastcsv.parse({ headers: true }))
@@ -96,12 +96,8 @@ const insertStationToMongoDB = (stationUrl) => {
 		});
 };
 
-const insertDataToMongoDB = async () => {
-	console.log("inserting...");
-	await fetchJourney(journeyUrls[0]);
-	await fetchJourney(journeyUrls[1]);
-	await fetchJourney(journeyUrls[2]);
-	await insertStationToMongoDB(stationUrl);
+const insertJourneysToMongoDB = () => {
+	journeyUrls.map(async (item) => await fetchJourney(item));
 };
 
 // Check if database exists, if not insert data to MongoDB
@@ -116,7 +112,8 @@ mongoose.connection.on("open", function (ref) {
 			return;
 		} else {
 			console.log("inserting to db");
-			insertDataToMongoDB();
+			insertJourneysToMongoDB();
+			insertStationToMongoDB();
 		}
 	});
 });
