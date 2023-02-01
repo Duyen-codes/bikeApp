@@ -9,11 +9,10 @@ import {
 } from "@mui/material";
 
 import Box from "@mui/material/Box";
-
 import Grid from "@mui/material/Grid";
-import GoogleMap from "./GoogleMap";
-
 import CircularProgress from "@mui/material/CircularProgress";
+
+import GoogleMap from "./GoogleMap";
 
 const StationDetails = (props) => {
 	const { state } = useLocation();
