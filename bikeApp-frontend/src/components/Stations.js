@@ -14,11 +14,10 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { Container } from "@mui/system";
 import { TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { IconButton, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
 
 import stationService from "../services/stations";
 import NewStationDialog from "./NewStationDialog";

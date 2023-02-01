@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useLocation, useParams } from "react-router-dom";
 import {
 	Card,
@@ -34,7 +33,7 @@ const StationDetails = (props) => {
 	const [top5ReturnStations, setTop5ReturnStations] = useState();
 	const [top5DepartureStations, setTop5DepartureStations] = useState();
 
-	const [center, setCenter] = React.useState({
+	const [center, setCenter] = useState({
 		lat: 0,
 		lng: 0,
 	});

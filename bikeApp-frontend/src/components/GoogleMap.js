@@ -10,11 +10,10 @@ import React, {
 } from "react";
 
 const GoogleMap = ({ station }) => {
-	const [zoom, setZoom] = useState(13);
-	const [center, setCenter] = useState({
+	const center = {
 		lat: station?.y,
 		lng: station?.x,
-	});
+	};
 
 	const render = (status) => {
 		switch (status) {
@@ -26,7 +25,7 @@ const GoogleMap = ({ station }) => {
 				return (
 					<Map
 						center={center}
-						zoom={zoom}
+						zoom={13}
 						style={{
 							height: "450px",
 						}}
