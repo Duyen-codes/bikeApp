@@ -126,12 +126,7 @@ const Journeys = () => {
 						value={searchTerm}
 						onChange={(e) => setSearchTerm(e.target.value)}
 					/>
-					<Button
-						variant='outlined'
-						type='submit'
-						onClick={handleSearch}
-						size='small'
-					>
+					<Button variant='outlined' type='submit' size='small'>
 						Search
 					</Button>
 				</Box>
